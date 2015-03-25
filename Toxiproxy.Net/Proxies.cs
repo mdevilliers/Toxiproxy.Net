@@ -156,6 +156,19 @@ namespace Toxiproxy.Net
             return response.Data;
         }
 
+        public void UpdateUpStreamToxic(Proxy proxy, Toxic toxic)
+        {
+            if (proxy == null)
+            {
+                throw new ArgumentNullException("proxy");
+            }
+            if (toxic == null)
+            {
+                throw new ArgumentNullException("toxic");
+            }
+            UpdateUpStreamToxic(proxy.Name, toxic);
+        }
+
         public void UpdateUpStreamToxic(string proxyName, Toxic toxic)
         {
             if (string.IsNullOrEmpty(proxyName))
@@ -179,6 +192,19 @@ namespace Toxiproxy.Net
             }
             //TODO : {"title":"listen tcp: invalid port 78787","status":500} 
             Console.WriteLine(response.Content);
+        }
+
+        public void UpdateDownStreamToxic(Proxy proxy, Toxic toxic)
+        {
+            if (proxy == null)
+            {
+                throw new ArgumentNullException("proxy");
+            }
+            if (toxic == null)
+            {
+                throw new ArgumentNullException("toxic");
+            }
+            UpdateDownStreamToxic(proxy.Name, toxic);
         }
 
         public void UpdateDownStreamToxic(string proxyName, Toxic toxic)
