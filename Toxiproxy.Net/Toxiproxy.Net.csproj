@@ -52,6 +52,8 @@
     <Compile Include="Toxic.cs" />
     <Compile Include="ToxicCollection.cs" />
     <Compile Include="ToxicClient.cs" />
+    <Compile Include="ToxiproxiException.cs" />
+    <Compile Include="ToxiproxyBaseClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

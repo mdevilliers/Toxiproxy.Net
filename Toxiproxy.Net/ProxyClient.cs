@@ -4,7 +4,8 @@ using RestSharp;
 
 namespace Toxiproxy.Net
 {
-    public class ProxyClient
+
+    public class ProxyClient : ToxiproxyBaseClient
     {
         private readonly IRestClient _client;
         public ProxyClient(IRestClient client)
@@ -26,17 +27,13 @@ namespace Toxiproxy.Net
             {
                 return new Dictionary<string, Proxy>();
             }
-            Console.WriteLine(response.Content);
             return response.Data;
         }
 
         public void Add(Proxy proxy)
         {
-            var request = new RestRequest("/proxies", Method.POST)
-            {
-                RequestFormat = DataFormat.Json
-            };
-
+            var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies", Method.POST);
+            request.RequestFormat = DataFormat.Json;
             request.AddJsonBody(proxy);
 
             var response = this._client.Execute(request);
@@ -45,7 +42,6 @@ namespace Toxiproxy.Net
             {
                 throw response.ErrorException;
             }
-            Console.WriteLine(response.Content);
         }
 
         public Proxy Update(Proxy proxy)
@@ -55,10 +51,9 @@ namespace Toxiproxy.Net
                 throw new ArgumentNullException("proxy");
             }
 
-            var request = new RestRequest("/proxies/{name}", Method.POST)
-            {
-                RequestFormat = DataFormat.Json
-            };
+            var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies/{name}", Method.POST);
+            
+            request.RequestFormat = DataFormat.Json;
             request.AddUrlSegment("name", proxy.Name);
             request.AddJsonBody(proxy);
 
@@ -68,8 +63,7 @@ namespace Toxiproxy.Net
             {
                 throw response.ErrorException;
             }
-            //TODO : {"title":"listen tcp: invalid port 78787","status":500} 
-            Console.WriteLine(response.Content);
+
             return response.Data;
 
         }
@@ -81,16 +75,16 @@ namespace Toxiproxy.Net
                 throw new ArgumentNullException("proxyName");
             }
 
-            var request = new RestRequest("/proxies/{name}", Method.GET);
+            var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies/{name}", Method.GET);
             request.AddUrlSegment("name", proxyName);
-
+          
             var response = this._client.Execute<Proxy>(request);
 
             if (response.ErrorException != null)
             {
                 throw response.ErrorException;
             }
-            Console.WriteLine(response.Content);
+
             return response.Data;
         }
 
@@ -111,7 +105,7 @@ namespace Toxiproxy.Net
                 throw new ArgumentNullException("proxyName");
             }
 
-            var request = new RestRequest("/proxies/{name}/upstream/toxics", Method.GET);
+            var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies/{name}/upstream/toxics", Method.GET);
             request.AddUrlSegment("name", proxyName);
 
             var response = this._client.Execute<ToxicCollection>(request);
@@ -120,8 +114,7 @@ namespace Toxiproxy.Net
             {
                 throw response.ErrorException;
             }
-            //{"title":"Proxy with name yyy doesn't exist","status":404} 
-            Console.WriteLine(response.Content);
+
            return response.Data;
         }
 
@@ -142,7 +135,7 @@ namespace Toxiproxy.Net
                 throw new ArgumentNullException("proxyName");
             }
 
-            var request = new RestRequest("/proxies/{name}/downstream/toxics", Method.GET);
+            var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies/{name}/downstream/toxics", Method.GET);
             request.AddUrlSegment("name", proxyName);
 
             var response = this._client.Execute<ToxicCollection>(request);
@@ -151,8 +144,7 @@ namespace Toxiproxy.Net
             {
                 throw response.ErrorException;
             }
-            //{"title":"Proxy with name yyy doesn't exist","status":404} 
-            Console.WriteLine(response.Content);
+
             return response.Data;
         }
 
@@ -176,10 +168,10 @@ namespace Toxiproxy.Net
                 throw new ArgumentNullException("proxyName");
             }
 
-            var request = new RestRequest("/proxies/{proxyName}/upstream/toxics/{toxicName}", Method.POST)
-            {
-                RequestFormat = DataFormat.Json
-            };
+            var request = GetDefaultRequestWithErrorParsingBehaviour(
+                "/proxies/{proxyName}/upstream/toxics/{toxicName}", Method.POST);
+            request.RequestFormat = DataFormat.Json;
+
             request.AddUrlSegment("proxyName", proxyName);
             request.AddUrlSegment("toxicName", toxic.ToxicType);
             request.AddJsonBody(toxic);
@@ -190,8 +182,6 @@ namespace Toxiproxy.Net
             {
                 throw response.ErrorException;
             }
-            //TODO : {"title":"listen tcp: invalid port 78787","status":500} 
-            Console.WriteLine(response.Content);
         }
 
         public void UpdateDownStreamToxic(Proxy proxy, Toxic toxic)
@@ -214,10 +204,10 @@ namespace Toxiproxy.Net
                 throw new ArgumentNullException("proxyName");
             }
 
-            var request = new RestRequest("/proxies/{proxyName}/downstream/toxics/{toxicName}", Method.POST)
-            {
-                RequestFormat = DataFormat.Json
-            };
+            var request =
+                GetDefaultRequestWithErrorParsingBehaviour("/proxies/{proxyName}/downstream/toxics/{toxicName}", Method.POST);
+
+            request.RequestFormat = DataFormat.Json;
             request.AddUrlSegment("proxyName", proxyName);
             request.AddUrlSegment("toxicName", toxic.ToxicType);
             request.AddJsonBody(toxic);
@@ -228,8 +218,6 @@ namespace Toxiproxy.Net
             {
                 throw response.ErrorException;
             }
-            //TODO : {"title":"listen tcp: invalid port 78787","status":500} 
-            Console.WriteLine(response.Content);
         }
 
         public void Delete(Proxy proxy)
@@ -248,7 +236,7 @@ namespace Toxiproxy.Net
                 throw new ArgumentNullException("proxyName");
             }
 
-            var request = new RestRequest("/proxies/{name}", Method.DELETE);
+            var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies/{name}", Method.DELETE);
             request.AddUrlSegment("name", proxyName);
 
             var response = this._client.Execute(request);
@@ -257,19 +245,19 @@ namespace Toxiproxy.Net
             {
                 throw response.ErrorException;
             }
-            Console.WriteLine(response.Content);
         }
 
         public void Reset()
         {
-            var request = new RestRequest("/reset", Method.GET);
+            var request = GetDefaultRequestWithErrorParsingBehaviour("/reset", Method.GET);
             var response = this._client.Execute(request);
 
             if (response.ErrorException != null)
             {
                 throw response.ErrorException;
             } 
-            Console.WriteLine(response.Content);
         }
+
+       
     }
 }

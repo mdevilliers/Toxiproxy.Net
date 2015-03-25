@@ -4,7 +4,7 @@ using RestSharp;
 
 namespace Toxiproxy.Net
 {
-    public class ToxicClient
+    public class ToxicClient : ToxiproxyBaseClient
     {
         private readonly IRestClient _client;
         public ToxicClient(IRestClient client)
@@ -14,7 +14,7 @@ namespace Toxiproxy.Net
 
         public IDictionary<string, Proxy> All()
         {
-            var request = new RestRequest("/toxics", Method.GET);
+            var request = GetDefaultRequestWithErrorParsingBehaviour("/toxics", Method.GET);
             var response = this._client.Execute<Dictionary<string, Proxy>>(request);
 
             if (response.ErrorException != null)
@@ -26,8 +26,7 @@ namespace Toxiproxy.Net
             {
                 return new Dictionary<string, Proxy>();
             } 
-             
-            Console.WriteLine(response.Content);
+            
             return response.Data;
         }
     }
