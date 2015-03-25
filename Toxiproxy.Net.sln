@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E1CEF3
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toxiproxy.Net.Tests", "Toxiproxy.Net.Tests\Toxiproxy.Net.Tests.csproj", "{10087FD2-3D58-47B6-A431-54B78AF4E2AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,10 @@ Global
 		{6BD7B017-A750-4889-A66E-97B691838A8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BD7B017-A750-4889-A66E-97B691838A8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BD7B017-A750-4889-A66E-97B691838A8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10087FD2-3D58-47B6-A431-54B78AF4E2AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10087FD2-3D58-47B6-A431-54B78AF4E2AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10087FD2-3D58-47B6-A431-54B78AF4E2AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10087FD2-3D58-47B6-A431-54B78AF4E2AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,7 +15,7 @@ namespace Toxiproxy.Net
 
         public IDictionary<string, Proxy> All()
         {
-            var request = new RestRequest("/proxies", Method.GET);
+            var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies", Method.GET);
             var response = this._client.Execute<Dictionary<string, Proxy>>(request);
 
             if (response.ErrorException != null)
@@ -257,7 +257,6 @@ namespace Toxiproxy.Net
                 throw response.ErrorException;
             } 
         }
-
-       
+  
     }
 }
