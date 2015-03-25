@@ -3,22 +3,22 @@ using RestSharp;
 
 namespace Toxiproxy.Net
 {
-    public class Client
+    public class Connection
     {
         private readonly string _host;
         private readonly int _port;
-        private readonly RestClient _client;
+        private readonly IRestClient _client;
 
-        public Client() : this("localhost", 8474)
+        public Connection() : this("localhost", 8474)
         {
         }
 
-        public Client(string host)
+        public Connection(string host)
             : this(host, 8474)
         {
         }
 
-        public Client(string host, int port)
+        public Connection(string host, int port)
         {
             if (string.IsNullOrEmpty(host))
             {
@@ -29,14 +29,14 @@ namespace Toxiproxy.Net
             this._client = new RestClient(new Uri(string.Format("http://{0}:{1}", _host, _port)));
         }
 
-        public Proxies Proxies()
+        public ProxyClient Proxies()
         {
-            return new Proxies(this._client);
+            return new ProxyClient(this._client);
         }
 
-        public Toxics Toxics()
+        public ToxicClient Toxics()
         {
-            return new Toxics(this._client);
+            return new ToxicClient(this._client);
         }
 
     }

@@ -4,10 +4,10 @@ using RestSharp;
 
 namespace Toxiproxy.Net
 {
-    public class Toxics
+    public class ToxicClient
     {
-        private readonly RestClient _client;
-        public Toxics(RestClient client)
+        private readonly IRestClient _client;
+        public ToxicClient(IRestClient client)
         {
             this._client = client;
         }
