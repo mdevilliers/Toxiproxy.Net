@@ -38,6 +38,5 @@ namespace Toxiproxy.Net
         {
             return new ToxicClient(this._client);
         }
-
     }
 }
