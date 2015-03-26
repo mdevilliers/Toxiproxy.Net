@@ -33,7 +33,7 @@ namespace Toxiproxy.Net.Tests
 
         private void CreateKnownState()
         {
-            var client = _connection.Proxies();
+            var client = _connection.Client();
             foreach (var proxyName in client.All().Keys)
             {
                 client.Delete(proxyName);
@@ -46,7 +46,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void ErrorsAreThrownCorrectly()
         {
-            var client = _connection.Proxies();
+            var client = _connection.Client();
 
             Assert.Throws<ToxiproxiException>(() =>
             {
@@ -69,9 +69,9 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CanFindNamedProxy()
         {
-            var client = _connection.Proxies();
+            var client = _connection.Client();
             var proxy = client.FindProxy("one");
-
+            
             Assert.NotNull(proxy);
             Assert.Equal(proxy.Name, one.Name);
             Assert.Equal(proxy.Name, "one");
@@ -80,7 +80,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CanFindAllProxies()
         {
-            var client = _connection.Proxies();
+            var client = _connection.Client();
             var all = client.All();
 
             Assert.NotNull(all);
@@ -101,7 +101,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CanDeleteProxy()
         {
-            var client = _connection.Proxies();
+            var client = _connection.Client();
             client.Delete(one);
             client.Delete(two.Name);
 
@@ -113,7 +113,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CanUpdateProxy()
         {
-            var client = _connection.Proxies();
+            var client = _connection.Client();
 
             one.Enabled = false;
             one.Listen = "localhost:55555";
@@ -131,7 +131,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CanFindUpStreamAndDownStreamToxicsForProxy()
         {
-            var client = _connection.Proxies();
+            var client = _connection.Client();
 
             var downstream = client.FindDownStreamToxicsForProxy(one);
             var upstream = client.FindUpStreamToxicsForProxy(one);
@@ -150,7 +150,7 @@ namespace Toxiproxy.Net.Tests
         public void CanUpdateUpStreamToxic()
         {
 
-            var client = _connection.Proxies();
+            var client = _connection.Client();
 
             var upstream = client.FindUpStreamToxicsForProxy(one);
 
@@ -173,7 +173,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CanUpdateDownStreamToxic()
         {
-            var client = _connection.Proxies();
+            var client = _connection.Client();
 
             var downstream = client.FindDownStreamToxicsForProxy(one);
 
@@ -196,7 +196,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void ResetWorks()
         {
-            var client = _connection.Proxies();
+            var client = _connection.Client();
 
             var proxy = client.FindProxy(one.Name);
 

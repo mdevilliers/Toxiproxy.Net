@@ -4,11 +4,10 @@ using RestSharp;
 
 namespace Toxiproxy.Net
 {
-
-    public class ProxyClient : ToxiproxyBaseClient
+    public class Client : ToxiproxyBaseClient
     {
         private readonly IRestClient _client;
-        public ProxyClient(IRestClient client)
+        public Client(IRestClient client)
         {
             this._client = client;
         }
@@ -27,6 +26,12 @@ namespace Toxiproxy.Net
             {
                 return new Dictionary<string, Proxy>();
             }
+
+            foreach (var proxy in response.Data.Values)
+            {
+                proxy.Client = this;
+            }
+
             return response.Data;
         }
 
@@ -68,6 +73,7 @@ namespace Toxiproxy.Net
             {
                 throw response.ErrorException;
             }
+            response.Data.Client = this;
 
             return response.Data;
 
@@ -89,7 +95,7 @@ namespace Toxiproxy.Net
             {
                 throw response.ErrorException;
             }
-
+            response.Data.Client = this;
             return response.Data;
         }
 
@@ -120,6 +126,18 @@ namespace Toxiproxy.Net
                 throw response.ErrorException;
             }
 
+            response.Data.LatencyToxic.Client = this;
+            response.Data.LatencyToxic.Direction = ToxicDirection.UpStream;
+            response.Data.LatencyToxic.ParentProxy = proxyName;
+
+            response.Data.SlowCloseToxic.Client = this;
+            response.Data.SlowCloseToxic.Direction = ToxicDirection.UpStream;
+            response.Data.SlowCloseToxic.ParentProxy = proxyName;
+
+            response.Data.TimeoutToxic.Client = this;
+            response.Data.TimeoutToxic.Direction = ToxicDirection.UpStream;
+            response.Data.TimeoutToxic.ParentProxy = proxyName;
+
            return response.Data;
         }
 
@@ -149,6 +167,18 @@ namespace Toxiproxy.Net
             {
                 throw response.ErrorException;
             }
+
+            response.Data.LatencyToxic.Client = this;
+            response.Data.LatencyToxic.Direction = ToxicDirection.DownStream;
+            response.Data.LatencyToxic.ParentProxy = proxyName;
+
+            response.Data.SlowCloseToxic.Client = this;
+            response.Data.SlowCloseToxic.Direction = ToxicDirection.DownStream;
+            response.Data.SlowCloseToxic.ParentProxy = proxyName;
+
+            response.Data.TimeoutToxic.Client = this;
+            response.Data.TimeoutToxic.Direction = ToxicDirection.DownStream;
+            response.Data.TimeoutToxic.ParentProxy = proxyName;
 
             return response.Data;
         }
@@ -262,6 +292,5 @@ namespace Toxiproxy.Net
                 throw response.ErrorException;
             } 
         }
-  
     }
 }

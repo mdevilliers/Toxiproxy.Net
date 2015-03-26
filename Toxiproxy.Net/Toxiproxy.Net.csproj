@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProxyClient.cs" />
+    <Compile Include="Client.cs" />
     <Compile Include="Proxy.cs" />
     <Compile Include="Toxic.cs" />
     <Compile Include="ToxicCollection.cs" />

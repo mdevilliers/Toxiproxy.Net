@@ -3,22 +3,24 @@ using RestSharp;
 
 namespace Toxiproxy.Net
 {
-    public class Connection
+    public class Connection : IDisposable
     {
         private readonly string _host;
         private readonly int _port;
-        private readonly IRestClient _client;
+        private readonly IRestClient _restClient;
+        private readonly bool _resetAllToxicsAndProxiesOnClose ; 
 
-        public Connection() : this("localhost")
+        public Connection(bool resetAllToxicsAndProxiesOnClose = false)
+            : this("localhost", resetAllToxicsAndProxiesOnClose)
         {
         }
 
-        public Connection(string host)
-            : this(host, 8474)
+        public Connection(string host, bool resetAllToxicsAndProxiesOnClose = false)
+            : this(host, 8474, resetAllToxicsAndProxiesOnClose)
         {
         }
 
-        public Connection(string host, int port)
+        public Connection(string host, int port, bool resetAllToxicsAndProxiesOnClose = false)
         {
             if (string.IsNullOrEmpty(host))
             {
@@ -26,17 +28,26 @@ namespace Toxiproxy.Net
             }
             this._host = host;
             this._port = port;
-            this._client = new RestClient(new Uri(string.Format("http://{0}:{1}", _host, _port)));
+            this._resetAllToxicsAndProxiesOnClose = resetAllToxicsAndProxiesOnClose;
+            this._restClient = new RestClient(new Uri(string.Format("http://{0}:{1}", _host, _port)));
         }
 
-        public ProxyClient Proxies()
+        public Client Client()
         {
-            return new ProxyClient(this._client);
+            return new Client(this._restClient);
         }
 
         public ToxicClient Toxics()
         {
-            return new ToxicClient(this._client);
+            return new ToxicClient(this._restClient);
+        }
+
+        public void Dispose()
+        {
+            if (this._resetAllToxicsAndProxiesOnClose)
+            {
+                this.Client().Reset();
+            }
         }
     }
 }

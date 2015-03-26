@@ -1,11 +1,32 @@
 ﻿
 namespace Toxiproxy.Net
 {
+    internal enum ToxicDirection
+    {
+        UpStream,
+        DownStream
+    }
+
     public abstract class Toxic
     {
         public bool Enabled { get; set; }
 
-        public abstract string ToxicType { get; }
+        public void Update()
+        {
+            if (Direction == ToxicDirection.DownStream)
+            {
+                Client.UpdateDownStreamToxic(ParentProxy, this);
+            }
+            else
+            {
+                Client.UpdateUpStreamToxic(ParentProxy, this);
+            }
+        }
+
+        internal abstract string ToxicType { get; }
+        internal Client Client { get; set; }
+        internal string ParentProxy { get; set; }
+        internal ToxicDirection Direction { get; set; }
     }
 
     public class LatencyToxic : Toxic
@@ -13,7 +34,7 @@ namespace Toxiproxy.Net
         public int Latency { get; set; }
         public int Jitter { get; set; }
 
-        public override string ToxicType
+        internal override string ToxicType
         {
             get { return "latency"; }
         }
@@ -23,7 +44,7 @@ namespace Toxiproxy.Net
     {
         public int Delay { get; set; }
 
-        public override string ToxicType
+        internal override string ToxicType
         {
             get { return "slow_close"; }
         }
@@ -33,7 +54,7 @@ namespace Toxiproxy.Net
     {
         public int Timeout { get; set; }
 
-        public override string ToxicType
+        internal override string ToxicType
         {
             get { return "timeout"; }
         }
