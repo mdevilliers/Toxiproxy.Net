@@ -208,7 +208,7 @@ namespace Toxiproxy.Net.Tests
 
             var proxy_copy = client.FindProxy(one.Name);
 
-            Assert.Equal(proxy_copy.Enabled, false);
+            Assert.Equal(proxy_copy.Enabled, true);
 
         }
 
