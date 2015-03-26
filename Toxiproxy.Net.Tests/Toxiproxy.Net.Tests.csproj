@@ -64,7 +64,9 @@
   <ItemGroup>
     <Compile Include="ConnectionTests.cs" />
     <Compile Include="ClientTests.cs" />
+    <Compile Include="EntityTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToxiproxyTestsBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
