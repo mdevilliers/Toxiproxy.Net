@@ -2,6 +2,7 @@ version: 1.0.{build}
 before_build:
   - .nuget\nuget.exe restore
 build:
+  project: Toxiproxy.Net.sln
   verbosity: detailed
 
 environment:
