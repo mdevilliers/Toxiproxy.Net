@@ -32,6 +32,11 @@ namespace Toxiproxy.Net
 
         public void Add(Proxy proxy)
         {
+            if (proxy == null)
+            {
+                throw new ArgumentNullException("proxy");
+            }
+
             var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies", Method.POST);
             request.RequestFormat = DataFormat.Json;
             request.AddJsonBody(proxy);
