@@ -9,7 +9,7 @@ namespace Toxiproxy.Net
         private readonly int _port;
         private readonly IRestClient _client;
 
-        public Connection() : this("localhost", 8474)
+        public Connection() : this("localhost")
         {
         }
 
