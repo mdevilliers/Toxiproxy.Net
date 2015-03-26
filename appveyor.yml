@@ -10,5 +10,5 @@ environment:
        secure: 26bH2HPtzUIMzItgYkadz+zq96203FZn+70q1OHN0vX9tRQtzrpdHCmG0Hm8huLi
 
 after_test: 
-    - packages\OpenCover.4.5.3723\OpenCover.Console.exe -register:user -filter:"+[*]*" -target:"xunit\xunit.console.x86" -targetargs:"Toxiproxy.Net.Tests\bin\debug\Toxiproxy.Net.Tests.dll -appveyor" -output:coverage.xml
+    - packages\OpenCover.4.5.3723\OpenCover.Console.exe -register:user -filter:"+[*]*" -target:"%xunit20%\xunit.console.x86" -targetargs:"Toxiproxy.Net.Tests\bin\debug\Toxiproxy.Net.Tests.dll -appveyor" -output:coverage.xml
     - packages\coveralls.net.0.5.0\tools\coveralls.net.exe --opencover coverage.xml
