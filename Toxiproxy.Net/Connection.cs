@@ -37,7 +37,7 @@ namespace Toxiproxy.Net
             return new Client(this._restClient);
         }
 
-        public ToxicClient Toxics()
+        public ToxicClient ToxicClient()
         {
             return new ToxicClient(this._restClient);
         }

@@ -189,34 +189,13 @@ namespace Toxiproxy.Net
             {
                 throw new ArgumentNullException("proxy");
             }
-            if (toxic == null)
-            {
-                throw new ArgumentNullException("toxic");
-            }
+
             UpdateUpStreamToxic(proxy.Name, toxic);
         }
 
         public void UpdateUpStreamToxic(string proxyName, Toxic toxic)
         {
-            if (string.IsNullOrEmpty(proxyName))
-            {
-                throw new ArgumentNullException("proxyName");
-            }
-
-            var request = GetDefaultRequestWithErrorParsingBehaviour(
-                "/proxies/{proxyName}/upstream/toxics/{toxicName}", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-
-            request.AddUrlSegment("proxyName", proxyName);
-            request.AddUrlSegment("toxicName", toxic.ToxicType);
-            request.AddJsonBody(toxic);
-
-            var response = this._client.Execute(request);
-
-            if (response.ErrorException != null)
-            {
-                throw response.ErrorException;
-            }
+            UpdateToxic(proxyName, toxic, ToxicDirection.UpStream);
         }
 
         public void UpdateDownStreamToxic(Proxy proxy, Toxic toxic)
@@ -225,26 +204,34 @@ namespace Toxiproxy.Net
             {
                 throw new ArgumentNullException("proxy");
             }
-            if (toxic == null)
-            {
-                throw new ArgumentNullException("toxic");
-            }
+
             UpdateDownStreamToxic(proxy.Name, toxic);
         }
 
         public void UpdateDownStreamToxic(string proxyName, Toxic toxic)
+        {
+            UpdateToxic(proxyName, toxic, ToxicDirection.DownStream);
+        }
+
+        private void UpdateToxic(string proxyName, Toxic toxic, ToxicDirection direction)
         {
             if (string.IsNullOrEmpty(proxyName))
             {
                 throw new ArgumentNullException("proxyName");
             }
 
+            if (toxic == null)
+            {
+                throw new ArgumentNullException("toxic");
+            }
+
             var request =
-                GetDefaultRequestWithErrorParsingBehaviour("/proxies/{proxyName}/downstream/toxics/{toxicName}", Method.POST);
+                GetDefaultRequestWithErrorParsingBehaviour("/proxies/{proxyName}/{direction}/toxics/{toxicName}", Method.POST);
 
             request.RequestFormat = DataFormat.Json;
             request.AddUrlSegment("proxyName", proxyName);
             request.AddUrlSegment("toxicName", toxic.ToxicType);
+            request.AddUrlSegment("direction", direction.ToString().ToLower());
             request.AddJsonBody(toxic);
 
             var response = this._client.Execute(request);

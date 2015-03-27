@@ -1,14 +1,11 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace Toxiproxy.Net.Tests
 {
+    [Collection("Integration")]
     public class EntityTests : ToxiproxyTestsBase
     {
-        public EntityTests() : base()
-        {
-            
-        }
-
         [Fact]
         public void ProxyEntityHasToxics()
         {
@@ -50,20 +47,47 @@ namespace Toxiproxy.Net.Tests
         public void UpdatingAndSavingAToxicWorks()
         {
             var client = _connection.Client();
-            var latencyToxic = client.FindProxy("one").UpStreams().LatencyToxic;
+            var upLatencyToxic = client.FindProxy("one").UpStreams().LatencyToxic;
 
-            latencyToxic.Enabled = false;
-            latencyToxic.Jitter = 6666;
-            latencyToxic.Latency = 5555;
+            upLatencyToxic.Enabled = false;
+            upLatencyToxic.Jitter = 6666;
+            upLatencyToxic.Latency = 5555;
 
-            latencyToxic.Update();
+            upLatencyToxic.Update();
 
-            var latency_copy = client.FindUpStreamToxicsForProxy(client.FindProxy("one")).LatencyToxic;
+            var upLatency_copy = client.FindUpStreamToxicsForProxy(client.FindProxy("one")).LatencyToxic;
 
-            Assert.Equal(latencyToxic.Enabled, latency_copy.Enabled);
-            Assert.Equal(latencyToxic.Jitter, latency_copy.Jitter);
-            Assert.Equal(latencyToxic.Latency, latency_copy.Latency);
+            Assert.Equal(upLatencyToxic.Enabled, upLatency_copy.Enabled);
+            Assert.Equal(upLatencyToxic.Jitter, upLatency_copy.Jitter);
+            Assert.Equal(upLatencyToxic.Latency, upLatency_copy.Latency);
 
+            var downlatencyToxic = client.FindProxy("one").DownStreams().LatencyToxic;
+
+            downlatencyToxic.Enabled = false;
+            downlatencyToxic.Jitter = 6666;
+            downlatencyToxic.Latency = 5555;
+
+            downlatencyToxic.Update();
+
+            var downlatency_copy = client.FindDownStreamToxicsForProxy(client.FindProxy("one")).LatencyToxic;
+
+            Assert.Equal(downlatencyToxic.Enabled, downlatency_copy.Enabled);
+            Assert.Equal(downlatencyToxic.Jitter, downlatency_copy.Jitter);
+            Assert.Equal(downlatencyToxic.Latency, downlatency_copy.Latency);
+        }
+
+        [Fact]
+        public void DeletingAnEntityWorks()
+        {
+            var client = _connection.Client();
+            var proxy = client.FindProxy("one");
+
+            proxy.Delete();
+
+            Assert.Throws<ToxiproxiException>(() =>
+            {
+                client.FindProxy("one");
+            });
         }
     }
 }

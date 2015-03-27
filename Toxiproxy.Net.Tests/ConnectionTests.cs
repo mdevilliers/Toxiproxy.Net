@@ -19,5 +19,6 @@ namespace Toxiproxy.Net.Tests
                 var connection = new Connection(null);
             });
         }
+
     }
 }

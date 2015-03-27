@@ -1,13 +1,11 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace Toxiproxy.Net.Tests
 {
+    [Collection("Integration")]
     public class ClientTests : ToxiproxyTestsBase
     {
-        public ClientTests() : base()
-        {
-        }
-
         [Fact]
         public void ErrorsAreThrownCorrectly()
         {
@@ -55,7 +53,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CanFindAllToxics()
         {
-            var client = _connection.Toxics();
+            var client = _connection.ToxicClient();
             var all = client.All();
 
             Assert.NotNull(all);
@@ -177,5 +175,15 @@ namespace Toxiproxy.Net.Tests
 
         }
 
+        [Fact]
+        public void CanNotAddANullProxy()
+        {
+            var client = _connection.Client();
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                client.Add(null);
+            });
+        }
     }
 }
