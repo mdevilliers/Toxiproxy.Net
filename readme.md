@@ -33,7 +33,7 @@ using (var connection = new Connection(true))
     var latency = connection.Client().FindProxy("ms_sql").UpStreams().LatencyToxic;
 
     // set a latency of 1 second 
-    latency.Latency = 10000;
+    latency.Latency = 1000;
 
     // save it
     latency.Update();
