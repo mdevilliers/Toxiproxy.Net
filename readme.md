@@ -16,9 +16,27 @@ Test Coverage
 
 [![Coverage Status](https://coveralls.io/repos/mdevilliers/Toxiproxy.Net/badge.svg?branch=master)](https://coveralls.io/r/mdevilliers/Toxiproxy.Net?branch=master)
 
+Getting started
+---------------
+
+A copy of toxiproxy compiled for windows is in the [compiled folder](https://github.com/mdevilliers/Toxiproxy.Net/tree/master/compiled/Win64). Linux and Darwin builds are available from the [official release site](https://github.com/Shopify/toxiproxy/releases)
 
 Usage
 -----
+
+The unit tests give a good overview of how to fully use the api. Here are some examples to get started -
+
+Set up a proxy
+
+```
+var connection = new Connection();
+var client = connection.Client();
+
+var localToGoogleProxy = new Proxy() { Name = "localToGoogle", Enabled = true, Listen = "127.0.0.1:44399", Upstream = "google.com:443" };
+
+client.Add(localToGoogleProxy);
+
+```
 
 
 ```
