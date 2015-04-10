@@ -19,6 +19,12 @@ Test Coverage
 Getting started
 ---------------
 
+To install via the nuget package console
+
+```
+Install-Package Toxiproxy.Net
+```
+
 A copy of toxiproxy compiled for windows is in the [compiled folder](https://github.com/mdevilliers/Toxiproxy.Net/tree/master/compiled/Win64). Linux and Darwin builds are available from the [official release site](https://github.com/Shopify/toxiproxy/releases)
 
 Usage
