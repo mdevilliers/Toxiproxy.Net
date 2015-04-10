@@ -32,12 +32,55 @@ Set up a proxy
 var connection = new Connection();
 var client = connection.Client();
 
-var localToGoogleProxy = new Proxy() { Name = "localToGoogle", Enabled = true, Listen = "127.0.0.1:44399", Upstream = "google.com:443" };
+//proxy all traffic from 127.0.0.1:44399 to https://google.com
+var localToGoogleProxy = new Proxy() { 
+    Name = "localToGoogle", 
+    Enabled = true, 
+    Listen = "127.0.0.1:44399", 
+    Upstream = "google.com:443" 
+};
 
 client.Add(localToGoogleProxy);
 
 ```
 
+Disable a proxy
+
+```
+var connection = new Connection();
+var client = connection.Client();
+var proxy = client.FindProxy("localToGoogle");
+
+proxy.Enabled = false;
+proxy.Update();
+
+```
+
+Timeout a proxy
+
+```
+var connection = new Connection();
+var client = connection.Client();
+var proxy = client.FindProxy("localToGoogle");
+	
+var timeout = proxy.UpStreams().TimeoutToxic;
+timeout.Enabled = true;
+timeout.Update();
+
+```
+
+Return a list of all proxies
+
+```
+var connection = new Connection();
+var client = connection.Client();
+var proxy = client.FindProxy("localToGoogle");
+
+client.All();
+
+```
+
+Reset all proxes to a good state automatically
 
 ```
 // assuming the proxy is running with its default settings e.g. localhost:8474
