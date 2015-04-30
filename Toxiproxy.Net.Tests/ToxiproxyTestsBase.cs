@@ -43,7 +43,10 @@ namespace Toxiproxy.Net.Tests
 
         public void Dispose()
         {
-            _process.Kill();
+            if (_process.HasExited == false)
+            {
+                _process.Kill();
+            }
         }
     }
 }
