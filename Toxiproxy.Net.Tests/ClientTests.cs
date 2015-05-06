@@ -51,17 +51,6 @@ namespace Toxiproxy.Net.Tests
         }
 
         [Fact]
-        public void CanFindAllToxics()
-        {
-            var client = _connection.ToxicClient();
-            var all = client.All();
-
-            Assert.NotNull(all);
-            Assert.Equal(2, all.Keys.Count);
-
-        }
-
-        [Fact]
         public void CanDeleteProxy()
         {
             var client = _connection.Client();
@@ -120,16 +109,19 @@ namespace Toxiproxy.Net.Tests
             upstream.LatencyToxic.Latency = 77777;
             upstream.SlowCloseToxic.Delay = 88888;
             upstream.TimeoutToxic.Timeout = 99999;
+            upstream.BandwidthToxic.Rate = 66666;
 
             client.UpdateUpStreamToxic(one, upstream.LatencyToxic);
             client.UpdateUpStreamToxic(one, upstream.SlowCloseToxic);
             client.UpdateUpStreamToxic(one, upstream.TimeoutToxic);
+            client.UpdateUpStreamToxic(one, upstream.BandwidthToxic);
 
             var upstreamCopy = client.FindUpStreamToxicsForProxy(one);
 
             Assert.Equal(upstream.LatencyToxic.Latency, upstreamCopy.LatencyToxic.Latency);
             Assert.Equal(upstream.SlowCloseToxic.Delay, upstreamCopy.SlowCloseToxic.Delay);
             Assert.Equal(upstream.TimeoutToxic.Timeout, upstreamCopy.TimeoutToxic.Timeout);
+            Assert.Equal(upstream.BandwidthToxic.Rate, upstreamCopy.BandwidthToxic.Rate);
 
         }
 
@@ -147,13 +139,14 @@ namespace Toxiproxy.Net.Tests
             client.UpdateDownStreamToxic(one, downstream.LatencyToxic);
             client.UpdateDownStreamToxic(one, downstream.SlowCloseToxic);
             client.UpdateDownStreamToxic(one, downstream.TimeoutToxic);
+            client.UpdateUpStreamToxic(one, downstream.BandwidthToxic);
 
             var upstreamCopy = client.FindDownStreamToxicsForProxy(one);
 
             Assert.Equal(downstream.LatencyToxic.Latency, upstreamCopy.LatencyToxic.Latency);
             Assert.Equal(downstream.SlowCloseToxic.Delay, upstreamCopy.SlowCloseToxic.Delay);
             Assert.Equal(downstream.TimeoutToxic.Timeout, upstreamCopy.TimeoutToxic.Timeout);
-
+            Assert.Equal(downstream.BandwidthToxic.Rate, upstreamCopy.BandwidthToxic.Rate);
         }
 
         [Fact]
