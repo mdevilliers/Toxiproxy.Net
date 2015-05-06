@@ -1,7 +1,4 @@
 ﻿
-using RestSharp.Deserializers;
-using RestSharp.Serializers;
-
 namespace Toxiproxy.Net
 {
     public class Proxy

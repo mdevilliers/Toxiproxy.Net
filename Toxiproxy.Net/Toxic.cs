@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Toxiproxy.Net
 {
     internal enum ToxicDirection
@@ -57,6 +59,16 @@ namespace Toxiproxy.Net
         internal override string ToxicType
         {
             get { return "timeout"; }
+        }
+    }
+
+    public class BandwidthToxic : Toxic
+    {
+        public Int64 Rate { get; set; }
+
+        internal override string ToxicType
+        {
+            get { return "bandwidth"; }
         }
     }
 }

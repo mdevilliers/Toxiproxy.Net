@@ -12,5 +12,8 @@ namespace Toxiproxy.Net
 
         [DeserializeAs(Name = "timeout")]
         public TimeoutToxic TimeoutToxic { get; set; }
+
+        [DeserializeAs(Name = "bandwidth")]
+        public BandwidthToxic BandwidthToxic { get; set; }
     }
 }
