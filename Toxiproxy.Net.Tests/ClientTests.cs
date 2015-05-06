@@ -51,17 +51,6 @@ namespace Toxiproxy.Net.Tests
         }
 
         [Fact]
-        public void CanFindAllToxics()
-        {
-            var client = _connection.ToxicClient();
-            var all = client.All();
-
-            Assert.NotNull(all);
-            Assert.Equal(2, all.Keys.Count);
-
-        }
-
-        [Fact]
         public void CanDeleteProxy()
         {
             var client = _connection.Client();
