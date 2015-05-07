@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>Toxiproxy.Net</id>
-    <version>1.0.3</version>
+    <version>1.1.0</version>
     <authors>Mark deVilliers</authors>
     <owners>Mark deVilliers</owners>
     <licenseUrl>https://github.com/mdevilliers/Toxiproxy.Net/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/mdevilliers/Toxiproxy.Net</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Toxiproxy.Net is a .Net client for Shopify's Toxiproxy REST/JSON Api. Toxiproxy is a proxy to test your system by simulating network failure.</description>
-    <releaseNotes>Bug fixes in the parent project.</releaseNotes>
+    <releaseNotes>Additional bandwidth toxic added. Bug fixes in the parent project.</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>Toxiproxy</tags>
     <dependencies>
