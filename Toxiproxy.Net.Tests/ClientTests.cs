@@ -73,11 +73,11 @@ namespace Toxiproxy.Net.Tests
 
             client.Update(one);
 
-            var one_copy = client.FindProxy(one.Name);
+            var oneCopy = client.FindProxy(one.Name);
 
-            Assert.Equal(one.Enabled, one_copy.Enabled);
-            Assert.Equal(one.Listen, one_copy.Listen);
-            Assert.Equal(one.Upstream, one_copy.Upstream);
+            Assert.Equal(one.Enabled, oneCopy.Enabled);
+            Assert.Equal(one.Listen, oneCopy.Listen);
+            Assert.Equal(one.Upstream, oneCopy.Upstream);
         }
 
         [Fact]
@@ -169,7 +169,7 @@ namespace Toxiproxy.Net.Tests
             client.UpdateDownStreamToxic(one, downstream.TimeoutToxic);
             client.UpdateDownStreamToxic(one, downstream.BandwidthToxic);
             client.UpdateDownStreamToxic(one, downstream.SlicerToxic);
-
+            
             var downStreamCopy = client.FindDownStreamToxicsForProxy(one);
 
             Assert.Equal(downstream.LatencyToxic.Latency, downStreamCopy.LatencyToxic.Latency);
@@ -199,9 +199,9 @@ namespace Toxiproxy.Net.Tests
 
             client.Reset();
 
-            var proxy_copy = client.FindProxy(one.Name);
+            var proxyCopy = client.FindProxy(one.Name);
 
-            Assert.Equal(proxy_copy.Enabled, true);
+            Assert.Equal(proxyCopy.Enabled, true);
 
         }
 

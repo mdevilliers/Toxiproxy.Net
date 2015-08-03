@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RestSharp;
+using RestSharp.Deserializers;
 
 namespace Toxiproxy.Net
 {
@@ -191,37 +192,37 @@ namespace Toxiproxy.Net
             return response.Data;
         }
 
-        public void UpdateUpStreamToxic(Proxy proxy, Toxic toxic)
+        public T UpdateUpStreamToxic<T>(Proxy proxy, Toxic<T> toxic)
         {
             if (proxy == null)
             {
                 throw new ArgumentNullException("proxy");
             }
 
-            UpdateUpStreamToxic(proxy.Name, toxic);
+            return UpdateUpStreamToxic<T>(proxy.Name, toxic);
         }
 
-        public void UpdateUpStreamToxic(string proxyName, Toxic toxic)
+        public T UpdateUpStreamToxic<T>(string proxyName, Toxic<T> toxic)
         {
-            UpdateToxic(proxyName, toxic, ToxicDirection.UpStream);
+            return UpdateToxic<T>(proxyName, toxic, ToxicDirection.UpStream);
         }
 
-        public void UpdateDownStreamToxic(Proxy proxy, Toxic toxic)
+        public T UpdateDownStreamToxic<T>(Proxy proxy, Toxic<T> toxic)
         {
             if (proxy == null)
             {
                 throw new ArgumentNullException("proxy");
             }
 
-            UpdateDownStreamToxic(proxy.Name, toxic);
+            return UpdateDownStreamToxic<T>(proxy.Name, toxic);
         }
 
-        public void UpdateDownStreamToxic(string proxyName, Toxic toxic)
+        public T UpdateDownStreamToxic<T>(string proxyName, Toxic<T> toxic)
         {
-            UpdateToxic(proxyName, toxic, ToxicDirection.DownStream);
+            return UpdateToxic<T>(proxyName, toxic, ToxicDirection.DownStream);
         }
 
-        private void UpdateToxic(string proxyName, Toxic toxic, ToxicDirection direction)
+        private T UpdateToxic<T>(string proxyName, Toxic<T> toxic, ToxicDirection direction)
         {
             if (string.IsNullOrEmpty(proxyName))
             {
@@ -248,6 +249,15 @@ namespace Toxiproxy.Net
             {
                 throw response.ErrorException;
             }
+
+            var returnedObject = new JsonDeserializer().Deserialize<T>(response);
+
+            if (!returnedObject.Equals(toxic))
+            {
+                var message = string.Format("Error updating Toxic : toxic returned {0}", response.Content);
+                throw new ToxiproxiException(message);
+            }
+            return returnedObject;
         }
 
         public void Delete(Proxy proxy)
