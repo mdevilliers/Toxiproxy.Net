@@ -1,5 +1,6 @@
 ﻿
 using System;
+using RestSharp.Deserializers;
 
 namespace Toxiproxy.Net
 {
@@ -69,6 +70,22 @@ namespace Toxiproxy.Net
         internal override string ToxicType
         {
             get { return "bandwidth"; }
+        }
+    }
+
+    public class SlicerToxic : Toxic
+    {
+        [DeserializeAs(Name = "average_size")]
+        public int Average_Size { get; set; }
+
+        [DeserializeAs(Name = "size_variation")]
+        public int Size_Variation { get; set; }
+
+        public int Delay { get; set; }
+
+        internal override string ToxicType
+        {
+            get { return "slicer"; }
         }
     }
 }

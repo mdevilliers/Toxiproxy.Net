@@ -92,10 +92,12 @@ namespace Toxiproxy.Net.Tests
             Assert.NotNull(downstream.LatencyToxic);
             Assert.NotNull(downstream.SlowCloseToxic);
             Assert.NotNull(downstream.TimeoutToxic);
+            Assert.NotNull(downstream.SlicerToxic);
             Assert.NotNull(upstream);
             Assert.NotNull(upstream.LatencyToxic);
             Assert.NotNull(upstream.SlowCloseToxic);
             Assert.NotNull(upstream.TimeoutToxic);
+            Assert.NotNull(upstream.SlicerToxic);
         }
 
         [Fact]
@@ -106,23 +108,40 @@ namespace Toxiproxy.Net.Tests
 
             var upstream = client.FindUpStreamToxicsForProxy(one);
 
-            upstream.LatencyToxic.Latency = 77777;
-            upstream.SlowCloseToxic.Delay = 88888;
-            upstream.TimeoutToxic.Timeout = 99999;
-            upstream.BandwidthToxic.Rate = 66666;
+            upstream.LatencyToxic.Latency = 1;
+            upstream.LatencyToxic.Jitter = 2;
+
+            upstream.SlowCloseToxic.Delay = 3;
+
+            upstream.TimeoutToxic.Timeout = 4;
+
+            upstream.BandwidthToxic.Rate = 5;
+
+            upstream.SlicerToxic.Average_Size = 1024;
+            upstream.SlicerToxic.Size_Variation = 512;
+            upstream.SlicerToxic.Delay = 10;
 
             client.UpdateUpStreamToxic(one, upstream.LatencyToxic);
             client.UpdateUpStreamToxic(one, upstream.SlowCloseToxic);
             client.UpdateUpStreamToxic(one, upstream.TimeoutToxic);
             client.UpdateUpStreamToxic(one, upstream.BandwidthToxic);
+            client.UpdateUpStreamToxic(one, upstream.SlicerToxic);
 
             var upstreamCopy = client.FindUpStreamToxicsForProxy(one);
 
             Assert.Equal(upstream.LatencyToxic.Latency, upstreamCopy.LatencyToxic.Latency);
+            Assert.Equal(upstream.LatencyToxic.Jitter, upstreamCopy.LatencyToxic.Jitter);
+
             Assert.Equal(upstream.SlowCloseToxic.Delay, upstreamCopy.SlowCloseToxic.Delay);
+
             Assert.Equal(upstream.TimeoutToxic.Timeout, upstreamCopy.TimeoutToxic.Timeout);
+
             Assert.Equal(upstream.BandwidthToxic.Rate, upstreamCopy.BandwidthToxic.Rate);
 
+            Assert.Equal(upstream.SlicerToxic.Average_Size, upstreamCopy.SlicerToxic.Average_Size);
+            Assert.Equal(upstream.SlicerToxic.Size_Variation, upstreamCopy.SlicerToxic.Size_Variation);
+            Assert.Equal(upstream.SlicerToxic.Delay, upstreamCopy.SlicerToxic.Delay);
+            
         }
 
         [Fact]
@@ -132,21 +151,39 @@ namespace Toxiproxy.Net.Tests
 
             var downstream = client.FindDownStreamToxicsForProxy(one);
 
-            downstream.LatencyToxic.Latency = 77777;
-            downstream.SlowCloseToxic.Delay = 88888;
-            downstream.TimeoutToxic.Timeout = 99999;
+            downstream.LatencyToxic.Latency = 1;
+            downstream.LatencyToxic.Jitter = 2;
+
+            downstream.SlowCloseToxic.Delay = 3;
+
+            downstream.TimeoutToxic.Timeout = 4;
+
+            downstream.BandwidthToxic.Rate = 5;
+
+            downstream.SlicerToxic.Average_Size = 1024;
+            downstream.SlicerToxic.Size_Variation = 512;
+            downstream.SlicerToxic.Delay = 10;
 
             client.UpdateDownStreamToxic(one, downstream.LatencyToxic);
             client.UpdateDownStreamToxic(one, downstream.SlowCloseToxic);
             client.UpdateDownStreamToxic(one, downstream.TimeoutToxic);
-            client.UpdateUpStreamToxic(one, downstream.BandwidthToxic);
+            client.UpdateDownStreamToxic(one, downstream.BandwidthToxic);
+            client.UpdateDownStreamToxic(one, downstream.SlicerToxic);
 
-            var upstreamCopy = client.FindDownStreamToxicsForProxy(one);
+            var downStreamCopy = client.FindDownStreamToxicsForProxy(one);
 
-            Assert.Equal(downstream.LatencyToxic.Latency, upstreamCopy.LatencyToxic.Latency);
-            Assert.Equal(downstream.SlowCloseToxic.Delay, upstreamCopy.SlowCloseToxic.Delay);
-            Assert.Equal(downstream.TimeoutToxic.Timeout, upstreamCopy.TimeoutToxic.Timeout);
-            Assert.Equal(downstream.BandwidthToxic.Rate, upstreamCopy.BandwidthToxic.Rate);
+            Assert.Equal(downstream.LatencyToxic.Latency, downStreamCopy.LatencyToxic.Latency);
+            Assert.Equal(downstream.LatencyToxic.Jitter, downStreamCopy.LatencyToxic.Jitter);
+
+            Assert.Equal(downstream.SlowCloseToxic.Delay, downStreamCopy.SlowCloseToxic.Delay);
+
+            Assert.Equal(downstream.TimeoutToxic.Timeout, downStreamCopy.TimeoutToxic.Timeout);
+
+            Assert.Equal(downstream.BandwidthToxic.Rate, downStreamCopy.BandwidthToxic.Rate);
+
+            Assert.Equal(downstream.SlicerToxic.Average_Size, downStreamCopy.SlicerToxic.Average_Size);
+            Assert.Equal(downstream.SlicerToxic.Size_Variation, downStreamCopy.SlicerToxic.Size_Variation);
+            Assert.Equal(downstream.SlicerToxic.Delay, downStreamCopy.SlicerToxic.Delay);
         }
 
         [Fact]

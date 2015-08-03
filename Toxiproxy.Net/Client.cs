@@ -138,6 +138,10 @@ namespace Toxiproxy.Net
             response.Data.TimeoutToxic.Direction = ToxicDirection.UpStream;
             response.Data.TimeoutToxic.ParentProxy = proxyName;
 
+            response.Data.SlicerToxic.Client = this;
+            response.Data.SlicerToxic.Direction = ToxicDirection.UpStream;
+            response.Data.SlicerToxic.ParentProxy = proxyName;
+
            return response.Data;
         }
 
@@ -179,6 +183,10 @@ namespace Toxiproxy.Net
             response.Data.TimeoutToxic.Client = this;
             response.Data.TimeoutToxic.Direction = ToxicDirection.DownStream;
             response.Data.TimeoutToxic.ParentProxy = proxyName;
+
+            response.Data.SlicerToxic.Client = this;
+            response.Data.SlicerToxic.Direction = ToxicDirection.DownStream;
+            response.Data.SlicerToxic.ParentProxy = proxyName;
 
             return response.Data;
         }
@@ -233,7 +241,7 @@ namespace Toxiproxy.Net
             request.AddUrlSegment("toxicName", toxic.ToxicType);
             request.AddUrlSegment("direction", direction.ToString().ToLower());
             request.AddJsonBody(toxic);
-
+          
             var response = this._client.Execute(request);
 
             if (response.ErrorException != null)
