@@ -16,7 +16,7 @@ namespace Toxiproxy.Net
         public IDictionary<string, Proxy> All()
         {
             var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies", Method.GET);
-            var response = this._client.Execute<Dictionary<string, Proxy>>(request);
+            var response =_client.Execute<Dictionary<string, Proxy>>(request);
 
             if (response.ErrorException != null)
             {
@@ -47,7 +47,7 @@ namespace Toxiproxy.Net
             request.RequestFormat = DataFormat.Json;
             request.AddJsonBody(proxy);
 
-            var response = this._client.Execute(request);
+            var response = _client.Execute(request);
 
             if (response.ErrorException != null)
             {
@@ -68,7 +68,7 @@ namespace Toxiproxy.Net
             request.AddUrlSegment("name", proxy.Name);
             request.AddJsonBody(proxy);
 
-            var response = this._client.Execute<Proxy>(request);
+            var response = _client.Execute<Proxy>(request);
 
             if (response.ErrorException != null)
             {
@@ -90,7 +90,7 @@ namespace Toxiproxy.Net
             var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies/{name}", Method.GET);
             request.AddUrlSegment("name", proxyName);
           
-            var response = this._client.Execute<Proxy>(request);
+            var response = _client.Execute<Proxy>(request);
 
             if (response.ErrorException != null)
             {
@@ -120,31 +120,18 @@ namespace Toxiproxy.Net
             var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies/{name}/upstream/toxics", Method.GET);
             request.AddUrlSegment("name", proxyName);
 
-            var response = this._client.Execute<ToxicCollection>(request);
+            var response = _client.Execute<ToxicCollection>(request);
 
             if (response.ErrorException != null)
             {
                 throw response.ErrorException;
             }
+            var collection = response.Data;
+            InitiliseToxicCollection(collection, ToxicDirection.UpStream, proxyName);
 
-            response.Data.LatencyToxic.Client = this;
-            response.Data.LatencyToxic.Direction = ToxicDirection.UpStream;
-            response.Data.LatencyToxic.ParentProxy = proxyName;
-
-            response.Data.SlowCloseToxic.Client = this;
-            response.Data.SlowCloseToxic.Direction = ToxicDirection.UpStream;
-            response.Data.SlowCloseToxic.ParentProxy = proxyName;
-
-            response.Data.TimeoutToxic.Client = this;
-            response.Data.TimeoutToxic.Direction = ToxicDirection.UpStream;
-            response.Data.TimeoutToxic.ParentProxy = proxyName;
-
-            response.Data.SlicerToxic.Client = this;
-            response.Data.SlicerToxic.Direction = ToxicDirection.UpStream;
-            response.Data.SlicerToxic.ParentProxy = proxyName;
-
-           return response.Data;
+            return collection;
         }
+
 
         public ToxicCollection FindDownStreamToxicsForProxy(Proxy proxy)
         {
@@ -166,30 +153,17 @@ namespace Toxiproxy.Net
             var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies/{name}/downstream/toxics", Method.GET);
             request.AddUrlSegment("name", proxyName);
 
-            var response = this._client.Execute<ToxicCollection>(request);
+            var response = _client.Execute<ToxicCollection>(request);
 
             if (response.ErrorException != null)
             {
                 throw response.ErrorException;
             }
 
-            response.Data.LatencyToxic.Client = this;
-            response.Data.LatencyToxic.Direction = ToxicDirection.DownStream;
-            response.Data.LatencyToxic.ParentProxy = proxyName;
+            var collection = response.Data;
+            InitiliseToxicCollection(collection, ToxicDirection.DownStream, proxyName);
 
-            response.Data.SlowCloseToxic.Client = this;
-            response.Data.SlowCloseToxic.Direction = ToxicDirection.DownStream;
-            response.Data.SlowCloseToxic.ParentProxy = proxyName;
-
-            response.Data.TimeoutToxic.Client = this;
-            response.Data.TimeoutToxic.Direction = ToxicDirection.DownStream;
-            response.Data.TimeoutToxic.ParentProxy = proxyName;
-
-            response.Data.SlicerToxic.Client = this;
-            response.Data.SlicerToxic.Direction = ToxicDirection.DownStream;
-            response.Data.SlicerToxic.ParentProxy = proxyName;
-
-            return response.Data;
+            return collection;
         }
 
         public T UpdateUpStreamToxic<T>(Proxy proxy, Toxic<T> toxic)
@@ -199,12 +173,12 @@ namespace Toxiproxy.Net
                 throw new ArgumentNullException("proxy");
             }
 
-            return UpdateUpStreamToxic<T>(proxy.Name, toxic);
+            return UpdateUpStreamToxic(proxy.Name, toxic);
         }
 
         public T UpdateUpStreamToxic<T>(string proxyName, Toxic<T> toxic)
         {
-            return UpdateToxic<T>(proxyName, toxic, ToxicDirection.UpStream);
+            return UpdateToxic(proxyName, toxic, ToxicDirection.UpStream);
         }
 
         public T UpdateDownStreamToxic<T>(Proxy proxy, Toxic<T> toxic)
@@ -214,12 +188,12 @@ namespace Toxiproxy.Net
                 throw new ArgumentNullException("proxy");
             }
 
-            return UpdateDownStreamToxic<T>(proxy.Name, toxic);
+            return UpdateDownStreamToxic(proxy.Name, toxic);
         }
 
         public T UpdateDownStreamToxic<T>(string proxyName, Toxic<T> toxic)
         {
-            return UpdateToxic<T>(proxyName, toxic, ToxicDirection.DownStream);
+            return UpdateToxic(proxyName, toxic, ToxicDirection.DownStream);
         }
 
         private T UpdateToxic<T>(string proxyName, Toxic<T> toxic, ToxicDirection direction)
@@ -243,7 +217,7 @@ namespace Toxiproxy.Net
             request.AddUrlSegment("direction", direction.ToString().ToLower());
             request.AddJsonBody(toxic);
           
-            var response = this._client.Execute(request);
+            var response = _client.Execute(request);
 
             if (response.ErrorException != null)
             {
@@ -266,7 +240,7 @@ namespace Toxiproxy.Net
             {
                 throw new ArgumentNullException("proxy");
             }
-            this.Delete(proxy.Name);
+            Delete(proxy.Name);
         }
 
         public void Delete(string proxyName)
@@ -279,7 +253,7 @@ namespace Toxiproxy.Net
             var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies/{name}", Method.DELETE);
             request.AddUrlSegment("name", proxyName);
 
-            var response = this._client.Execute(request);
+            var response = _client.Execute(request);
 
             if (response.ErrorException != null)
             {
@@ -290,12 +264,31 @@ namespace Toxiproxy.Net
         public void Reset()
         {
             var request = GetDefaultRequestWithErrorParsingBehaviour("/reset", Method.GET);
-            var response = this._client.Execute(request);
+            var response = _client.Execute(request);
 
             if (response.ErrorException != null)
             {
                 throw response.ErrorException;
             } 
+        }
+
+        private void InitiliseToxicCollection(ToxicCollection collection, ToxicDirection direction, string proxyName)
+        {
+            collection.LatencyToxic.Client = this;
+            collection.LatencyToxic.Direction = direction;
+            collection.LatencyToxic.ParentProxy = proxyName;
+
+            collection.SlowCloseToxic.Client = this;
+            collection.SlowCloseToxic.Direction = direction;
+            collection.SlowCloseToxic.ParentProxy = proxyName;
+
+            collection.TimeoutToxic.Client = this;
+            collection.TimeoutToxic.Direction = direction;
+            collection.TimeoutToxic.ParentProxy = proxyName;
+
+            collection.SlicerToxic.Client = this;
+            collection.SlicerToxic.Direction = direction;
+            collection.SlicerToxic.ParentProxy = proxyName;
         }
     }
 }
