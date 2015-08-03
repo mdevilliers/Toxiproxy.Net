@@ -12,10 +12,9 @@ namespace Toxiproxy.Net.Tests
 
         public ToxiproxyTestsBase() 
         {
-            // TODO : start up version of toxiproxy....
             var processInfo = new ProcessStartInfo()
             {
-                FileName = @"..\..\..\compiled\Win64\toxiproxy.exe"
+                FileName = @"..\..\..\compiled\Win64\toxiproxy-windows-amd64.exe"
             };
             _process = new Process()
             {
