@@ -80,7 +80,6 @@ Return a list of all proxies
 ```
 var connection = new Connection();
 var client = connection.Client();
-var proxy = client.FindProxy("localToGoogle");
 
 client.All();
 
