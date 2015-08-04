@@ -25,12 +25,13 @@ To install via the nuget package console
 Install-Package Toxiproxy.Net
 ```
 
-A copy of toxiproxy compiled for windows is in the [compiled folder](https://github.com/mdevilliers/Toxiproxy.Net/tree/master/compiled/Win64). Linux and Darwin builds are available from the [official release site](https://github.com/Shopify/toxiproxy/releases)
+A copy of toxiproxy compiled for windows is in the [compiled folder](https://github.com/mdevilliers/Toxiproxy.Net/tree/master/compiled/Win64). Linux, Darwin and Windows builds are available from the [official release site](https://github.com/Shopify/toxiproxy/releases)
 
 Usage
 -----
 
-The unit tests give a good overview of how to fully use the api. Here are some examples to get started -
+The unit tests give a good overview of how to fully use the api. 
+Here are some examples to get started -
 
 Set up a proxy
 
