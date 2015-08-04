@@ -26,13 +26,9 @@ namespace Toxiproxy.Net
             Client.Delete(this);
         }
 
-        public void Update()
+        public Proxy Update()
         {
-            var response = Client.Update(this);
-
-            this.Enabled = response.Enabled;
-            this.Listen = response.Listen;
-            this.Upstream = response.Upstream;
+            return Client.Update(this);         
         }
 
         internal Client Client { get; set; }

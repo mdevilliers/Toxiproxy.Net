@@ -1,5 +1,4 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace Toxiproxy.Net.Tests
 {
@@ -34,13 +33,17 @@ namespace Toxiproxy.Net.Tests
             proxy.Listen = "127.0.0.1:44355";
             proxy.Upstream = "gmail.com:443";
 
-            proxy.Update();
+            var updatedProxy = proxy.Update();
 
-            var proxy_copy = client.FindProxy("one");
+            Assert.Equal(proxy.Enabled, updatedProxy.Enabled);
+            Assert.Equal(proxy.Listen, updatedProxy.Listen);
+            Assert.Equal(proxy.Upstream, updatedProxy.Upstream);
 
-            Assert.Equal(proxy.Enabled, proxy_copy.Enabled);
-            Assert.Equal(proxy.Listen, proxy_copy.Listen);
-            Assert.Equal(proxy.Upstream, proxy_copy.Upstream);
+            var proxyCopy = client.FindProxy("one");
+
+            Assert.Equal(proxy.Enabled, proxyCopy.Enabled);
+            Assert.Equal(proxy.Listen, proxyCopy.Listen);
+            Assert.Equal(proxy.Upstream, proxyCopy.Upstream);
         }
 
         [Fact]
@@ -69,11 +72,11 @@ namespace Toxiproxy.Net.Tests
 
             downlatencyToxic.Update();
 
-            var downlatency_copy = client.FindDownStreamToxicsForProxy(client.FindProxy("one")).LatencyToxic;
+            var downlatencyCopy = client.FindDownStreamToxicsForProxy(client.FindProxy("one")).LatencyToxic;
 
-            Assert.Equal(downlatencyToxic.Enabled, downlatency_copy.Enabled);
-            Assert.Equal(downlatencyToxic.Jitter, downlatency_copy.Jitter);
-            Assert.Equal(downlatencyToxic.Latency, downlatency_copy.Latency);
+            Assert.Equal(downlatencyToxic.Enabled, downlatencyCopy.Enabled);
+            Assert.Equal(downlatencyToxic.Jitter, downlatencyCopy.Jitter);
+            Assert.Equal(downlatencyToxic.Latency, downlatencyCopy.Latency);
         }
 
         [Fact]
@@ -82,6 +85,9 @@ namespace Toxiproxy.Net.Tests
             var client = _connection.Client();
             var proxy = client.FindProxy("one");
 
+            proxy.Delete();
+
+            // deleting is idemnepotent
             proxy.Delete();
 
             Assert.Throws<ToxiproxiException>(() =>

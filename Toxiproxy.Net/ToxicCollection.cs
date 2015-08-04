@@ -15,5 +15,8 @@ namespace Toxiproxy.Net
 
         [DeserializeAs(Name = "bandwidth")]
         public BandwidthToxic BandwidthToxic { get; set; }
+
+        [DeserializeAs(Name = "slicer")]
+        public SlicerToxic SlicerToxic { get; set; }
     }
 }
