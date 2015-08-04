@@ -210,10 +210,7 @@ namespace Toxiproxy.Net.Tests
         {
             var client = _connection.Client();
 
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                client.Add(null);
-            });
+            Assert.Throws<ArgumentNullException>(() => client.Add(null));
         }
     }
 }
