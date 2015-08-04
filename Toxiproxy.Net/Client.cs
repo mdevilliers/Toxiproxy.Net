@@ -36,7 +36,7 @@ namespace Toxiproxy.Net
             return response.Data;
         }
 
-        public void Add(Proxy proxy)
+        public Proxy Add(Proxy proxy)
         {
             if (proxy == null)
             {
@@ -47,12 +47,15 @@ namespace Toxiproxy.Net
             request.RequestFormat = DataFormat.Json;
             request.AddJsonBody(proxy);
 
-            var response = _client.Execute(request);
+            var response = _client.Execute<Proxy>(request);
 
             if (response.ErrorException != null)
             {
                 throw response.ErrorException;
             }
+
+            response.Data.Client = this;
+            return response.Data;
         }
 
         public Proxy Update(Proxy proxy)
@@ -131,7 +134,6 @@ namespace Toxiproxy.Net
 
             return collection;
         }
-
 
         public ToxicCollection FindDownStreamToxicsForProxy(Proxy proxy)
         {

@@ -11,7 +11,7 @@ namespace Toxiproxy.Net
             {
                 OnBeforeDeserialization = resp =>
                 {
-                    if (resp.StatusCode != HttpStatusCode.OK)
+                    if (resp.StatusCode != HttpStatusCode.OK && resp.StatusCode != HttpStatusCode.Created)
                     {
                         var parsed = SimpleJson.DeserializeObject<ToxiproxiErrorMessage>(resp.Content);
                         throw new ToxiproxiException(parsed.title) { Status = parsed.status };
