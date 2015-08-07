@@ -110,3 +110,8 @@ using (var connection = new Connection(true))
 } 
 
 ```
+
+Thanks
+------
+
+[soneyworld](https://github.com/soneyworld)
