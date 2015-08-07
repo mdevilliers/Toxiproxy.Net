@@ -291,6 +291,10 @@ namespace Toxiproxy.Net
             collection.SlicerToxic.Client = this;
             collection.SlicerToxic.Direction = direction;
             collection.SlicerToxic.ParentProxy = proxyName;
+
+            collection.BandwidthToxic.Client = this;
+            collection.BandwidthToxic.Direction = direction;
+            collection.BandwidthToxic.ParentProxy = proxyName;
         }
     }
 }
