@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RestSharp;
 using RestSharp.Deserializers;
+using RestSharp.Serializers;
 
 namespace Toxiproxy.Net
 {
@@ -10,7 +11,7 @@ namespace Toxiproxy.Net
         private readonly IRestClient _client;
         public Client(IRestClient client)
         {
-            this._client = client;
+            _client = client;
         }
 
         public IDictionary<string, Proxy> All()
@@ -80,7 +81,6 @@ namespace Toxiproxy.Net
             response.Data.Client = this;
 
             return response.Data;
-
         }
 
         public Proxy FindProxy(string proxyName)
@@ -103,102 +103,7 @@ namespace Toxiproxy.Net
             return response.Data;
         }
 
-        public ToxicCollection FindUpStreamToxicsForProxy(Proxy proxy)
-        {
-            if (proxy == null)
-            {
-                throw new ArgumentNullException("proxy");
-            }
-
-            return FindUpStreamToxicsForProxy(proxy.Name);
-        }
-
-        public ToxicCollection FindUpStreamToxicsForProxy(string proxyName)
-        {
-            if (string.IsNullOrEmpty(proxyName))
-            {
-                throw new ArgumentNullException("proxyName");
-            }
-
-            var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies/{name}/upstream/toxics", Method.GET);
-            request.AddUrlSegment("name", proxyName);
-
-            var response = _client.Execute<ToxicCollection>(request);
-
-            if (response.ErrorException != null)
-            {
-                throw response.ErrorException;
-            }
-            var collection = response.Data;
-            InitiliseToxicCollection(collection, ToxicDirection.UpStream, proxyName);
-
-            return collection;
-        }
-
-        public ToxicCollection FindDownStreamToxicsForProxy(Proxy proxy)
-        {
-            if (proxy == null)
-            {
-                throw new ArgumentNullException("proxy");
-            }
-
-            return FindDownStreamToxicsForProxy(proxy.Name);
-        }
-
-        public ToxicCollection FindDownStreamToxicsForProxy(string proxyName)
-        {
-            if (string.IsNullOrEmpty(proxyName))
-            {
-                throw new ArgumentNullException("proxyName");
-            }
-
-            var request = GetDefaultRequestWithErrorParsingBehaviour("/proxies/{name}/downstream/toxics", Method.GET);
-            request.AddUrlSegment("name", proxyName);
-
-            var response = _client.Execute<ToxicCollection>(request);
-
-            if (response.ErrorException != null)
-            {
-                throw response.ErrorException;
-            }
-
-            var collection = response.Data;
-            InitiliseToxicCollection(collection, ToxicDirection.DownStream, proxyName);
-
-            return collection;
-        }
-
-        public T UpdateUpStreamToxic<T>(Proxy proxy, Toxic<T> toxic)
-        {
-            if (proxy == null)
-            {
-                throw new ArgumentNullException("proxy");
-            }
-
-            return UpdateUpStreamToxic(proxy.Name, toxic);
-        }
-
-        public T UpdateUpStreamToxic<T>(string proxyName, Toxic<T> toxic)
-        {
-            return UpdateToxic(proxyName, toxic, ToxicDirection.UpStream);
-        }
-
-        public T UpdateDownStreamToxic<T>(Proxy proxy, Toxic<T> toxic)
-        {
-            if (proxy == null)
-            {
-                throw new ArgumentNullException("proxy");
-            }
-
-            return UpdateDownStreamToxic(proxy.Name, toxic);
-        }
-
-        public T UpdateDownStreamToxic<T>(string proxyName, Toxic<T> toxic)
-        {
-            return UpdateToxic(proxyName, toxic, ToxicDirection.DownStream);
-        }
-
-        private T UpdateToxic<T>(string proxyName, Toxic<T> toxic, ToxicDirection direction)
+        private T UpdateToxic<T>(string proxyName, Toxic toxic, ToxicDirection direction)
         {
             if (string.IsNullOrEmpty(proxyName))
             {
@@ -265,36 +170,13 @@ namespace Toxiproxy.Net
 
         public void Reset()
         {
-            var request = GetDefaultRequestWithErrorParsingBehaviour("/reset", Method.GET);
+            var request = GetDefaultRequestWithErrorParsingBehaviour("/reset", Method.POST);
             var response = _client.Execute(request);
 
             if (response.ErrorException != null)
             {
                 throw response.ErrorException;
             } 
-        }
-
-        private void InitiliseToxicCollection(ToxicCollection collection, ToxicDirection direction, string proxyName)
-        {
-            collection.LatencyToxic.Client = this;
-            collection.LatencyToxic.Direction = direction;
-            collection.LatencyToxic.ParentProxy = proxyName;
-
-            collection.SlowCloseToxic.Client = this;
-            collection.SlowCloseToxic.Direction = direction;
-            collection.SlowCloseToxic.ParentProxy = proxyName;
-
-            collection.TimeoutToxic.Client = this;
-            collection.TimeoutToxic.Direction = direction;
-            collection.TimeoutToxic.ParentProxy = proxyName;
-
-            collection.SlicerToxic.Client = this;
-            collection.SlicerToxic.Direction = direction;
-            collection.SlicerToxic.ParentProxy = proxyName;
-
-            collection.BandwidthToxic.Client = this;
-            collection.BandwidthToxic.Direction = direction;
-            collection.BandwidthToxic.ParentProxy = proxyName;
         }
     }
 }

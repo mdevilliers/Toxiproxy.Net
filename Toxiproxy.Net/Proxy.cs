@@ -1,26 +1,16 @@
 ﻿
+using System;
+
 namespace Toxiproxy.Net
 {
     public class Proxy
     {
         public string Name { get; set; }
-
         public string Listen { get; set; }
-
         public string Upstream { get; set; }
 
         public bool Enabled { get; set; }
-
-        public ToxicCollection UpStreams()
-        {
-            return Client.FindUpStreamToxicsForProxy(this);
-        }
-
-        public ToxicCollection DownStreams()
-        {
-            return Client.FindDownStreamToxicsForProxy(this);
-        }
-
+        
         public void Delete()
         {
             Client.Delete(this);
@@ -31,7 +21,11 @@ namespace Toxiproxy.Net
             return Client.Update(this);         
         }
 
+        public T Add<T>(T toxic) where T : Toxic
+        {
+            throw new NotImplementedException();
+        }
+
         internal Client Client { get; set; }
-        
     }
 }

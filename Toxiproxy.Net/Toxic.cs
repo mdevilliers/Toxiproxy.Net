@@ -1,40 +1,33 @@
 ﻿
 using System;
 using RestSharp.Deserializers;
+using RestSharp;
 
 namespace Toxiproxy.Net
 {
-    internal enum ToxicDirection
+    public enum ToxicDirection
     {
         UpStream,
         DownStream
     }
 
-    public abstract class Toxic<T>
+    public abstract class Toxic
     {
+        public string Name { get; set; }
         public bool Enabled { get; set; }
-
-        public T Update()
-        {
-            if (Direction == ToxicDirection.DownStream)
-            {
-                return Client.UpdateDownStreamToxic<T>(ParentProxy, this);
-            }
-            else
-            {
-                return Client.UpdateUpStreamToxic<T>(ParentProxy, this);
-            }
-        }
-
+        public ToxicDirection Stream { get; set; }
         internal abstract string ToxicType { get; }
+
         internal Client Client { get; set; }
         internal string ParentProxy { get; set; }
-        internal ToxicDirection Direction { get; set; }
+
+        public string Serialize() {
+            return SimpleJson.SerializeObject(this);
+        }
     }
 
-    public class LatencyToxic : Toxic<LatencyToxic>
+    public class LatencyToxic : Toxic
     {
-
         public int Latency { get; set; }
         public int Jitter { get; set; }
 
@@ -63,9 +56,8 @@ namespace Toxiproxy.Net
         }
     }
 
-    public class SlowCloseToxic : Toxic<SlowCloseToxic>
+    public class SlowCloseToxic : Toxic
     {
-
         public int Delay { get; set; }
 
         internal override string ToxicType
@@ -79,7 +71,6 @@ namespace Toxiproxy.Net
             return t != null ? this.Equals(t) : base.Equals(obj);
         }
 
-
         protected bool Equals(SlowCloseToxic other)
         {
             return Delay == other.Delay && Enabled == other.Enabled;
@@ -92,9 +83,8 @@ namespace Toxiproxy.Net
 
     }
 
-    public class TimeoutToxic : Toxic<TimeoutToxic>
+    public class TimeoutToxic : Toxic
     {
-
         public int Timeout { get; set; }
 
         internal override string ToxicType
@@ -107,6 +97,7 @@ namespace Toxiproxy.Net
             var t = obj as TimeoutToxic;
             return t != null ? this.Equals(t) : base.Equals(obj);
         }
+
         protected bool Equals(TimeoutToxic other)
         {
             return Timeout == other.Timeout && Enabled == other.Enabled;
@@ -118,10 +109,9 @@ namespace Toxiproxy.Net
         }
     }
 
-    public class BandwidthToxic : Toxic<BandwidthToxic>
+    public class BandwidthToxic : Toxic
     {
-
-        public Int64 Rate { get; set; }
+        public long Rate { get; set; }
 
         internal override string ToxicType
         {
@@ -131,7 +121,7 @@ namespace Toxiproxy.Net
         public override bool Equals(object obj)
         {
             var t = obj as BandwidthToxic;
-            return t != null ? this.Equals(t) : base.Equals(obj);
+            return t != null ? Equals(t) : base.Equals(obj);
         }
 
         protected bool Equals(BandwidthToxic other)
@@ -145,9 +135,8 @@ namespace Toxiproxy.Net
         }
     }
 
-    public class SlicerToxic : Toxic<SlicerToxic>
+    public class SlicerToxic : Toxic
     {
-       
         [DeserializeAs(Name = "average_size")]
         public int Average_Size { get; set; }
 

@@ -7,14 +7,34 @@ namespace Toxiproxy.Net.Tests
     {
         protected Connection _connection;
         protected Process _process;
-        protected readonly Proxy one = new Proxy() { Name = "one", Enabled = true, Listen = "127.0.0.1:44399", Upstream = "google.com:443" };
-        protected readonly Proxy two = new Proxy() { Name = "two", Enabled = true, Listen = "127.0.0.1:44377", Upstream = "google.com:443" };
+
+        protected readonly Proxy ProxyOne = new Proxy
+        {
+            Name = "one",
+            Enabled = true,
+            Listen = "localhost:11111",
+            Upstream = "one.com"
+        };
+
+        protected readonly Proxy ProxyTwo = new Proxy {
+            Name = "two",
+            Enabled = true,
+            Listen = "localhost:22222",
+            Upstream = "two.com"
+        };
+
+        protected readonly Proxy ProxyThree = new Proxy {
+            Name = "three",
+            Enabled = true,
+            Listen = "localhost:33333",
+            Upstream = "three.com"
+        };
 
         public ToxiproxyTestsBase() 
         {
             var processInfo = new ProcessStartInfo()
             {
-                FileName = @"..\..\..\compiled\Win64\toxiproxy-windows-amd64.exe"
+                FileName = @"..\..\..\compiled\Win64\toxiproxy-server-2.0.0-windows-amd64.exe"
             };
             _process = new Process()
             {
@@ -23,22 +43,7 @@ namespace Toxiproxy.Net.Tests
             _process.Start();
             
             _connection = new Connection();
-
-            CreateKnownState();
         }
-
-        protected void CreateKnownState()
-        {
-            var client = _connection.Client();
-            foreach (var proxyName in client.All().Keys)
-            {
-                client.Delete(proxyName);
-            }
-
-            client.Add(one);
-            client.Add(two);
-        }
-
 
         public void Dispose()
         {

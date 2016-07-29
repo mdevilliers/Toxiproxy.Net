@@ -22,9 +22,9 @@ namespace Toxiproxy.Net
         }
     }
 
-    internal class ToxiproxiErrorMessage
-    {
-        public int status { get; set; }
-        public string title { get; set; }
-    }
+    //internal class ToxiproxiErrorMessage
+    //{
+    //    public int status { get; set; }
+    //    public string title { get; set; }
+    //}
 }
