@@ -371,10 +371,11 @@ namespace Toxiproxy.Net.Tests
             toxicInProxy.Attributes.AverageSize = 20;
             toxicInProxy.Attributes.Delay = 10;
             toxicInProxy.Attributes.SizeVariation = 2;
-            proxy.UpdateToxic<SlicerToxic>(toxic.Name, toxicInProxy);
+            proxy.UpdateToxic(toxic.Name, toxicInProxy);
 
-            // Reload again
-            var updatedToxic = proxy.GetToxicByName(toxicInProxy.Name);
+            // Reload again (we must use the initial name because the toxic update
+            // cannot update the toxic name
+            var updatedToxic = proxy.GetToxicByName(toxic.Name);
 
             // Assert
             // WARNING: By design it's not possible to update the name and the stream properties of the proxy.
