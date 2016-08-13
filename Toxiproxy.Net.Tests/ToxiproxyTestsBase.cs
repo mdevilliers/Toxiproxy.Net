@@ -12,21 +12,21 @@ namespace Toxiproxy.Net.Tests
         {
             Name = "one",
             Enabled = true,
-            Listen = "localhost:11111",
+            Listen = "127.0.0.1:11111",
             Upstream = "one.com"
         };
 
         protected readonly Proxy ProxyTwo = new Proxy {
             Name = "two",
             Enabled = true,
-            Listen = "localhost:22222",
+            Listen = "127.0.0.1:22222",
             Upstream = "two.com"
         };
 
         protected readonly Proxy ProxyThree = new Proxy {
             Name = "three",
             Enabled = true,
-            Listen = "localhost:33333",
+            Listen = "127.0.0.1:33333",
             Upstream = "three.com"
         };
 

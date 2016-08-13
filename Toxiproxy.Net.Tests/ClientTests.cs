@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Toxiproxy.Net.Toxics;
 using Xunit;
 
 namespace Toxiproxy.Net.Tests
@@ -11,7 +13,7 @@ namespace Toxiproxy.Net.Tests
         {
             var client = _connection.Client();
 
-            Assert.Throws<ToxiproxiException>(() =>
+            Assert.Throws<ToxiProxiException>(() =>
             {
                 client.FindProxy("DOESNOTEXIST");
             });
@@ -122,7 +124,6 @@ namespace Toxiproxy.Net.Tests
             Assert.Throws<ArgumentNullException>(() => client.Add(null));
         }
 
-        //------------- NEW TESTS ----------------
         [Fact]
         public void CreateANewProxyShouldWork()
         {
@@ -136,168 +137,35 @@ namespace Toxiproxy.Net.Tests
         }
 
         [Fact]
-        public void ListActiveToxicsShouldWork()
+        public void DeletingAProxyMoreThanOnceShouldThrowException()
         {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        public void CreateANewLatencyToxicShouldWork()
-        {
+            // Add a proxy and check it exists
             var client = _connection.Client();
+            client.Add(ProxyOne);
+            var proxy = client.FindProxy(ProxyOne.Name);
 
-            var proxy = new Proxy
-            {
-                Name = "testingProxy",
-                Enabled = true,
-                Listen = "127.0.0.1:9090",
-                Upstream = "google.com"
-            };
-
-            var newProxy = client.Add(proxy);
-
-            var toxic = new LatencyToxic {
-                Name = "LatencyToxicTest",
-                Stream = ToxicDirection.UpStream,
-                Enabled = true,
-                Jitter = 10,
-                Latency = 5
-            };
-            var newToxic = proxy.Add(toxic);
-
+            // deleting is not idemnepotent and should throw exception
+            proxy.Delete();
+            var exception = Assert.Throws<ToxiProxiException>(() => proxy.Delete());
+            Assert.Equal("Not found", exception.Message);
         }
 
         [Fact]
-        public void CreateANewSlowCloseToxicShouldWork()
+        public void DeletingAProxyWorks()
         {
-            throw new NotImplementedException();
-
+            // Add a proxy and check it exists
             var client = _connection.Client();
+            client.Add(ProxyOne);
+            var proxy = client.FindProxy(ProxyOne.Name);
 
-            var proxy = new Proxy
+            // delete
+            proxy.Delete();
+
+            // check it doesn't exists
+            Assert.Throws<ToxiProxiException>(() =>
             {
-                Name = "testingProxy",
-                Enabled = true,
-                Listen = "127.0.0.1:9090"
-            };
-
-            var newProxy = client.Add(proxy);
-
-            //var toxic = new SlowCloseToxic
-            //{
-            //    Name = "SlowCloseToxicTest",
-            //    Stream = ToxicDirection.UpStream,
-            //    Enabled = true,
-            //    Jitter = 10,
-            //    Latency = 5
-            //};
-            //var newToxic = proxy.Add(toxic);
-
-        }
-
-        [Fact]
-        public void CreateANewTimeoutToxicShouldWork()
-        {
-            throw new NotImplementedException();
-
-            var client = _connection.Client();
-
-            var proxy = new Proxy
-            {
-                Name = "testingProxy",
-                Enabled = true,
-                Listen = "127.0.0.1:9090"
-            };
-
-            var newProxy = client.Add(proxy);
-
-            //var toxic = new TimeoutToxic
-            //{
-            //    Name = "TimeoutToxicTest",
-            //    Stream = ToxicDirection.UpStream,
-            //    Enabled = true,
-            //    Jitter = 10,
-            //    Latency = 5
-            //};
-            //var newToxic = proxy.Add(toxic);
-
-        }
-
-        [Fact]
-        public void CreateANewBandwidthToxicShouldWork()
-        {
-            var client = _connection.Client();
-            var proxy = new Proxy
-            {
-                Name = "testingProxy",
-                Enabled = true,
-                Listen = "127.0.0.1:9090",
-                Upstream = "google.com"
-            };
-
-            var newProxy = client.Add(proxy);
-
-            var toxic = new BandwidthToxic
-            {
-                Name = "BandwidthToxicTest",
-                Stream = ToxicDirection.UpStream,
-                Enabled = true,
-                Rate = 100
-            };
-            var newToxic = proxy.Add(toxic);
-        }
-
-        [Fact]
-        public void CreateANewSlicerToxicShouldWork()
-        {
-            throw new NotImplementedException();
-
-            var client = _connection.Client();
-
-            var proxy = new Proxy
-            {
-                Name = "testingProxy",
-                Enabled = true,
-                Listen = "127.0.0.1:9090"
-            };
-
-            var newProxy = client.Add(proxy);
-
-            var toxic = new SlicerToxic
-            {
-                Name = "SlicerToxicTest",
-                Stream = ToxicDirection.UpStream,
-                Enabled = true,
-                Average_Size = 10,
-                Delay = 5,
-                Size_Variation = 1
-            };
-            var newToxic = proxy.Add(toxic);
-
-            Assert.Equal(toxic.Name, newToxic.Name);
-            Assert.Equal(toxic.Stream, newToxic.Stream);
-            Assert.Equal(toxic.Enabled, newToxic.Enabled);
-            Assert.Equal(toxic.Average_Size, newToxic.Average_Size);
-            Assert.Equal(toxic.Delay, newToxic.Delay);
-            Assert.Equal(toxic.Size_Variation, newToxic.Size_Variation);
-        }
-
-        [Fact]
-        public void GetAToxicShouldWork()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        public void UpdateAToxicShouldWork()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        public void DeleteAToxicShouldWork()
-        {
-            throw new NotImplementedException();
+                client.FindProxy(ProxyOne.Name);
+            });
         }
     }
 }
