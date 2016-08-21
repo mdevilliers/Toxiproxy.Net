@@ -27,14 +27,15 @@ namespace Toxiproxy.Net.Tests
             var connection = new Connection(resetAllToxicsAndProxiesOnClose: true);
 
             var client = connection.Client();
+            client.Add(ProxyOne);
 
-            var proxy = client.FindProxy("one");
+            var proxy = client.FindProxy(ProxyOne.Name);
             proxy.Enabled = false;
             proxy.Update();
 
             connection.Dispose();
 
-            var proxyCopy = client.FindProxy("one");
+            var proxyCopy = client.FindProxy(ProxyOne.Name);
             Assert.True(proxyCopy.Enabled);
         }
     }
