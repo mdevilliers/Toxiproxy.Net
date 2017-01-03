@@ -10,7 +10,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Toxiproxy.Net is a .Net client for Shopify's Toxiproxy REST/JSON Api. Toxiproxy is a proxy to test your system by simulating network failure.</description>
     <releaseNotes>This release aligns with V2 of Toxiproxy</releaseNotes>
-    <copyright>Copyright 2016</copyright>
+    <copyright>Copyright 2017</copyright>
     <tags>Toxiproxy</tags>
     <dependencies>
 	   <dependency id="Newtonsoft.Json" version="8.0.3" />
