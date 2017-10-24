@@ -33,8 +33,10 @@ namespace Toxiproxy.Net
                     return jsonObject.ToObject<BandwidthToxic>();
                 case ToxicTypenames.SlicerToxic:
                     return jsonObject.ToObject<SlicerToxic>();
+                case ToxicTypenames.LimitDataToxic:
+                    return jsonObject.ToObject<LimitDataToxic>();
                 default:
-                    throw new InvalidOperationException("Unknow type: " + typeName);
+                    throw new InvalidOperationException("Unknown type: " + typeName);
             }
         }
 
