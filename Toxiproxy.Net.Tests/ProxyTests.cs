@@ -211,6 +211,34 @@ namespace Toxiproxy.Net.Tests
         }
 
         [Fact]
+        public void CreateANewLimitDataToxicShouldWork()
+        {
+            var client = _connection.Client();
+            var proxy = new Proxy
+            {
+                Name = "testingProxy",
+                Enabled = true,
+                Listen = "127.0.0.1:9090",
+                Upstream = "google.com"
+            };
+
+            var newProxy = client.Add(proxy);
+
+            var toxic = new LimitDataToxic
+            {
+                Name = "LimitDataToxicTest",
+                Stream = ToxicDirection.UpStream
+            };
+            toxic.Attributes.Bytes = 512;
+            var newToxic = newProxy.Add(toxic);
+
+            // Need to retrieve the proxy and check the toxic's values
+            Assert.Equal(toxic.Name, newToxic.Name);
+            Assert.Equal(toxic.Stream, newToxic.Stream);
+            Assert.Equal(toxic.Attributes.Bytes, newToxic.Attributes.Bytes);
+        }
+
+        [Fact]
         public void AddTwoToxicWithTheSameNameShouldThrowException()
         {
             var client = _connection.Client();

@@ -7,5 +7,6 @@
         public const string SlicerToxic = "slicer";
         public const string SlowCloseToxic = "slow_close";
         public const string TimeoutToxic = "timeout";
+        public const string LimitDataToxic = "limit_data";
     }
 }
