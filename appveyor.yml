@@ -5,10 +5,6 @@ build:
   project: Toxiproxy.Net.sln
   verbosity: minimal
 
-environment:
-  COVERALLS_REPO_TOKEN:  
-    secure: 26bH2HPtzUIMzItgYkadz+zq96203FZn+70q1OHN0vX9tRQtzrpdHCmG0Hm8huLi
-
 after_build:
   - .nuget\nuget.exe pack Toxiproxy.Net.nuspec
 
