@@ -33,6 +33,17 @@ Usage
 The unit tests give a good overview of how to fully use the api. 
 Here are some examples to get started -
 
+Start Toxiproxy
+
+```
+_proxyProcess = new Process()
+    {
+        StartInfo = new ProcessStartInfo(@".\packages\Toxiproxy.Net\compiled\Win64\toxiproxy-server-2.1.2-windows-amd64.exe")
+    };
+_proxyProcess.Start();
+
+```
+
 Set up a proxy
 
 ```
@@ -69,10 +80,13 @@ Timeout a proxy
 var connection = new Connection();
 var client = connection.Client();
 var proxy = client.FindProxy("localToGoogle");
-	
-var timeout = proxy.UpStreams().TimeoutToxic;
-timeout.Enabled = true;
-timeout.Update();
+
+var timeoutProxy = new TimeoutToxic();
+timeoutProxy.Attributes.Timeout = 100;
+timeoutProxy.Toxicity = 1.0;
+
+proxy.Add(timeoutProxy);
+proxy.Update();
 
 ```
 
@@ -86,28 +100,30 @@ client.All();
 
 ```
 
-Reset all proxes to a good state automatically
+Reset all proxies to a good state automatically
 
 ```
 // assuming the proxy is running with its default settings e.g. localhost:8474
 // and there is a connection defined with the name "ms_sql"
 // create a connection to toxiproxy that will call reset on disposal
 // this resets the state of all the toxics and re-enables all of the proxies
-using (var connection = new Connection(true))
-{
+    using (var connection = new Connection(true))
+    {
 
-    // find the upstream latency toxic
-    var latency = connection.Client().FindProxy("ms_sql").UpStreams().LatencyToxic;
+        // find the upstream latency toxic
+        var proxy = connection.Client().FindProxy("ms_sql");
+        var latency = (LatencyToxic)proxy.GetToxicByName("Latency");
 
-    // set a latency of 1 second 
-    latency.Latency = 1000;
 
-    // save it
-    latency.Update();
+        // set a latency of 1 second 
+        latency.Attributes.Latency = 1000;
 
-    // do your test....
+        // save it
+        proxy.Update();
 
-} 
+        // do your test....
+
+    }
 
 ```
 
