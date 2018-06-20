@@ -167,5 +167,59 @@ namespace Toxiproxy.Net.Tests
                 client.FindProxy(ProxyOne.Name);
             });
         }
-    }
+
+		[Fact]
+		public void AddToxic_NullFields() {
+			// Create a proxy and add the proxy to the client
+			var client = _connection.Client();
+			client.Add( ProxyOne );
+
+			// Retrieve the proxy
+			var proxy = client.FindProxy( "one" );
+			var latencyToxic = new LatencyToxic();
+			latencyToxic.Attributes.Latency = 1000;
+
+			proxy.Add( latencyToxic );
+			proxy.Update();
+
+			var toxics = proxy.GetAllToxics();
+			Assert.Equal( 1, toxics.Count() );
+			var toxic = toxics.First();
+
+			Assert.Equal( 1, toxic.Toxicity );
+			Assert.Equal( ToxicDirection.DownStream, toxic.Stream );
+
+			//default pattern is <type>_<stream>
+			Assert.Equal( "latency_downstream", toxic.Name );
+		}
+
+		[Fact]
+		public void AddToxic_NonNullFields() {
+			// Create a proxy and add the proxy to the client
+			var client = _connection.Client();
+			client.Add( ProxyOne );
+
+			// Retrieve the proxy
+			var proxy = client.FindProxy( "one" );
+
+			var latencyToxic = new LatencyToxic();
+			latencyToxic.Attributes.Latency = 1000;
+			latencyToxic.Stream = ToxicDirection.UpStream;
+			latencyToxic.Name = "testName";
+			latencyToxic.Toxicity = 0.5;
+
+			proxy.Add( latencyToxic );
+			proxy.Update();
+
+			var toxics = proxy.GetAllToxics();
+			Assert.Equal( 1, toxics.Count() );
+			var toxic = toxics.First();
+
+			Assert.Equal( 0.5, toxic.Toxicity );
+			Assert.Equal( ToxicDirection.UpStream, toxic.Stream );
+
+			//default pattern is <type>_<stream>
+			Assert.Equal( "testName", toxic.Name );
+		}
+	}
 }

@@ -238,7 +238,12 @@ namespace Toxiproxy.Net
             using (var client = _clientFactory.Create())
             {
                 var url = string.Format("proxies/{0}/toxics", proxy.Name);
-                var objectSerialized = JsonConvert.SerializeObject(toxic);
+				var objectSerialized = JsonConvert.SerializeObject( 
+						toxic, 
+						new JsonSerializerSettings {
+							NullValueHandling = NullValueHandling.Ignore
+						} 
+					);
                 var response = client.PostAsync(url, new StringContent(objectSerialized, Encoding.UTF8, "application/json")).Result;
 
                 CheckIsSuccessStatusCode(response);
