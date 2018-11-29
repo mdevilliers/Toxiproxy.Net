@@ -34,7 +34,7 @@ namespace Toxiproxy.Net.Tests
         {
             var processInfo = new ProcessStartInfo()
             {
-                FileName = @"..\..\..\compiled\Win64\toxiproxy-server-2.1.2-windows-amd64.exe"
+                FileName = @"..\..\..\compiled\toxiproxy-server-2.1.3-windows-amd64.exe"
             };
             _process = new Process()
             {

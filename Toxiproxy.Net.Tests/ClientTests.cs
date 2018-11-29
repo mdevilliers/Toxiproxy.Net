@@ -109,11 +109,11 @@ namespace Toxiproxy.Net.Tests
             // Reset
             client.Reset();
 
-            // Retrive the proxy
+            // Retrieve the proxy
             var proxyCopy = client.FindProxy(ProxyOne.Name);
 
             // The proxy should be enabled
-            Assert.Equal(proxyCopy.Enabled, true);
+            Assert.True(proxyCopy.Enabled);
         }
 
         [Fact]
