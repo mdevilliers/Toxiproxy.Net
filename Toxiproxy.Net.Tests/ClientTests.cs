@@ -6,12 +6,19 @@ using Xunit;
 namespace Toxiproxy.Net.Tests
 {
     [Collection("Integration")]
-    public class ClientTests : ToxiproxyTestsBase
+    public class ClientTests : IDisposable
     {
+	    private readonly TestFixture _fixture;
+
+	    public ClientTests()
+	    {
+		    _fixture = new TestFixture();
+	    }
+	    
         [Fact]
         public void ErrorsAreThrownCorrectly()
         {
-            var client = _connection.Client();
+	        var client = _fixture.Client();
 
             Assert.Throws<ToxiProxiException>(() =>
             {
@@ -23,25 +30,25 @@ namespace Toxiproxy.Net.Tests
         public void CanFindNamedProxy()
         {
             // Create a proxy and add the proxy to the client
-            var client = _connection.Client();
-            client.Add(ProxyOne);
+            var client = _fixture.Client();
+            client.Add(_fixture.ProxyOne);
 
             // Retrieve the proxy
             var proxy = client.FindProxy("one");
             
-            // Check if it the corerct one
+            // Check if it the correct one
             Assert.NotNull(proxy);
-            Assert.Equal(proxy.Name, ProxyOne.Name);
-            Assert.Equal(proxy.Upstream, ProxyOne.Upstream);
+            Assert.Equal(proxy.Name, _fixture.ProxyOne.Name);
+            Assert.Equal(proxy.Upstream, _fixture.ProxyOne.Upstream);
         }
 
         [Fact]
         public void CanFindAllProxies()
         {
             // Create two proxies and add them to the client
-            var client = _connection.Client();
-            client.Add(ProxyOne);
-            client.Add(ProxyTwo);
+            var client = _fixture.Client();
+            client.Add(_fixture.ProxyOne);
+            client.Add(_fixture.ProxyTwo);
 
             // Retrieve all the proxies
             var all = client.All();
@@ -49,9 +56,9 @@ namespace Toxiproxy.Net.Tests
             // Check if there are two proxies
             Assert.Equal(2, all.Keys.Count);
             // Check if contains the correct proxies
-            var containsProxyOne = all.Keys.Contains(ProxyOne.Name);
+            var containsProxyOne = all.Keys.Contains(_fixture.ProxyOne.Name);
             Assert.True(containsProxyOne);
-            var containsProxyTwo = all.Keys.Contains(ProxyTwo.Name);
+            var containsProxyTwo = all.Keys.Contains(_fixture.ProxyTwo.Name);
             Assert.True(containsProxyOne);
         }
 
@@ -59,21 +66,21 @@ namespace Toxiproxy.Net.Tests
         public void CanDeleteProxy()
         {
             // Add three proxies
-            var client = _connection.Client();
-            client.Add(ProxyOne);
-            client.Add(ProxyTwo);
-            client.Add(ProxyThree);
+            var client = _fixture.Client();
+            client.Add(_fixture.ProxyOne);
+            client.Add(_fixture.ProxyTwo);
+            client.Add(_fixture.ProxyThree);
 
             // Delete two proxies
-            client.Delete(ProxyOne);
-            client.Delete(ProxyTwo.Name);
+            client.Delete(_fixture.ProxyOne);
+            client.Delete(_fixture.ProxyTwo.Name);
 
             // The client should contain only a proxy
             var all = client.All();
             Assert.Equal(1, all.Keys.Count);
 
             // The single proxy in the collection should be the 3th proxy
-            var containsProxyThree = all.Keys.Contains(ProxyThree.Name);
+            var containsProxyThree = all.Keys.Contains(_fixture.ProxyThree.Name);
             Assert.True(containsProxyThree);
         }
 
@@ -81,11 +88,11 @@ namespace Toxiproxy.Net.Tests
         public void CanUpdateProxy()
         {
             // Add a proxy
-            var client = _connection.Client();
-            client.Add(ProxyOne);
+            var client = _fixture.Client();
+            client.Add(_fixture.ProxyOne);
 
             // Retrieve the proxy and update the proxy
-            var proxyToUpdate = client.FindProxy(ProxyOne.Name);
+            var proxyToUpdate = client.FindProxy(_fixture.ProxyOne.Name);
             proxyToUpdate.Enabled = false;
             proxyToUpdate.Listen = "localhost:55555";
             proxyToUpdate.Upstream = "google.com";
@@ -103,14 +110,14 @@ namespace Toxiproxy.Net.Tests
         public void ResetWorks()
         {
             // Add a disabled proxy
-            var client = _connection.Client();
-            client.Add(ProxyOne);
+            var client = _fixture.Client();
+            client.Add(_fixture.ProxyOne);
 
             // Reset
             client.Reset();
 
             // Retrieve the proxy
-            var proxyCopy = client.FindProxy(ProxyOne.Name);
+            var proxyCopy = client.FindProxy(_fixture.ProxyOne.Name);
 
             // The proxy should be enabled
             Assert.True(proxyCopy.Enabled);
@@ -119,7 +126,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CanNotAddANullProxy()
         {
-            var client = _connection.Client();
+            var client = _fixture.Client();
 
             Assert.Throws<ArgumentNullException>(() => client.Add(null));
         }
@@ -127,24 +134,24 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CreateANewProxyShouldWork()
         {
-            var client = _connection.Client();
-            var newProxy = client.Add(ProxyOne);
+            var client = _fixture.Client();
+            var newProxy = client.Add(_fixture.ProxyOne);
 
-            Assert.Equal(ProxyOne.Name, newProxy.Name);
-            Assert.Equal(ProxyOne.Enabled, newProxy.Enabled);
-            Assert.Equal(ProxyOne.Listen, newProxy.Listen);
-            Assert.Equal(ProxyOne.Upstream, newProxy.Upstream);
+            Assert.Equal(_fixture.ProxyOne.Name, newProxy.Name);
+            Assert.Equal(_fixture.ProxyOne.Enabled, newProxy.Enabled);
+            Assert.Equal(_fixture.ProxyOne.Listen, newProxy.Listen);
+            Assert.Equal(_fixture.ProxyOne.Upstream, newProxy.Upstream);
         }
 
         [Fact]
         public void DeletingAProxyMoreThanOnceShouldThrowException()
         {
             // Add a proxy and check it exists
-            var client = _connection.Client();
-            client.Add(ProxyOne);
-            var proxy = client.FindProxy(ProxyOne.Name);
+            var client = _fixture.Client();
+            client.Add(_fixture.ProxyOne);
+            var proxy = client.FindProxy(_fixture.ProxyOne.Name);
 
-            // deleting is not idemnepotent and should throw exception
+            // deleting is not idempotent and should throw exception
             proxy.Delete();
             var exception = Assert.Throws<ToxiProxiException>(() => proxy.Delete());
             Assert.Equal("Not found", exception.Message);
@@ -154,9 +161,9 @@ namespace Toxiproxy.Net.Tests
         public void DeletingAProxyWorks()
         {
             // Add a proxy and check it exists
-            var client = _connection.Client();
-            client.Add(ProxyOne);
-            var proxy = client.FindProxy(ProxyOne.Name);
+            var client = _fixture.Client();
+            client.Add(_fixture.ProxyOne);
+            var proxy = client.FindProxy(_fixture.ProxyOne.Name);
 
             // delete
             proxy.Delete();
@@ -164,15 +171,15 @@ namespace Toxiproxy.Net.Tests
             // check it doesn't exists
             Assert.Throws<ToxiProxiException>(() =>
             {
-                client.FindProxy(ProxyOne.Name);
+                client.FindProxy(_fixture.ProxyOne.Name);
             });
         }
 
 		[Fact]
 		public void AddToxic_NullFields() {
 			// Create a proxy and add the proxy to the client
-			var client = _connection.Client();
-			client.Add( ProxyOne );
+			var client = _fixture.Client();
+			client.Add(_fixture.ProxyOne);
 
 			// Retrieve the proxy
 			var proxy = client.FindProxy( "one" );
@@ -196,8 +203,8 @@ namespace Toxiproxy.Net.Tests
 		[Fact]
 		public void AddToxic_NonNullFields() {
 			// Create a proxy and add the proxy to the client
-			var client = _connection.Client();
-			client.Add( ProxyOne );
+			var client = _fixture.Client();
+			client.Add(_fixture.ProxyOne);
 
 			// Retrieve the proxy
 			var proxy = client.FindProxy( "one" );
@@ -215,11 +222,14 @@ namespace Toxiproxy.Net.Tests
 			Assert.Equal( 1, toxics.Count() );
 			var toxic = toxics.First();
 
-			Assert.Equal( 0.5, toxic.Toxicity );
+			Assert.Equal( 0.5, toxic.Toxicity);
 			Assert.Equal( ToxicDirection.UpStream, toxic.Stream );
 
 			//default pattern is <type>_<stream>
 			Assert.Equal( "testName", toxic.Name );
 		}
-	}
+
+		public void Dispose()
+			=> _fixture?.Dispose();
+    }
 }

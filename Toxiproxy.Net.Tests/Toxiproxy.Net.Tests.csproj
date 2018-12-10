@@ -13,6 +13,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Include="../compiled/*" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+    
+    <ItemGroup>
       <ProjectReference Include="..\ToxiProxy.Net\ToxiProxy.Net.csproj" />
     </ItemGroup>
 

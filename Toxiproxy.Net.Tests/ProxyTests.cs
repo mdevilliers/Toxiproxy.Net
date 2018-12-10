@@ -1,18 +1,26 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Toxiproxy.Net.Toxics;
 using Xunit;
 
 namespace Toxiproxy.Net.Tests
 {
     [Collection("Integration")]
-    public class ProxyTests : ToxiproxyTestsBase
+    public class ProxyTests : IDisposable
     {
+	    private readonly TestFixture _fixture;
+
+	    public ProxyTests()
+	    {
+		    _fixture = new TestFixture();
+	    }
+	    
         [Fact]
         public void GetAllToxicsFromAProxyShouldWork()
         {
             // Add two toxics to a proxy and check if they are present in the list
             // of the toxies for the given proxy
-            var client = _connection.Client();
+            var client = _fixture.Client();
             var proxy = new Proxy
             {
                 Name = "testingProxy",
@@ -62,7 +70,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CreateANewLatencyToxicShouldWork()
         {
-            var client = _connection.Client();
+            var client = _fixture.Client();
 
             var proxy = new Proxy
             {
@@ -93,7 +101,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CreateANewSlowCloseToxicShouldWork()
         {
-            var client = _connection.Client();
+            var client = _fixture.Client();
 
             var proxy = new Proxy
             {
@@ -123,7 +131,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CreateANewTimeoutToxicShouldWork()
         {
-            var client = _connection.Client();
+            var client = _fixture.Client();
 
             var proxy = new Proxy
             {
@@ -153,7 +161,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CreateANewBandwidthToxicShouldWork()
         {
-            var client = _connection.Client();
+            var client = _fixture.Client();
             var proxy = new Proxy
             {
                 Name = "testingProxy",
@@ -181,7 +189,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CreateANewSlicerToxicShouldWork()
         {
-            var client = _connection.Client();
+            var client = _fixture.Client();
             var proxy = new Proxy
             {
                 Name = "testingProxy",
@@ -213,7 +221,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void CreateANewLimitDataToxicShouldWork()
         {
-            var client = _connection.Client();
+            var client = _fixture.Client();
             var proxy = new Proxy
             {
                 Name = "testingProxy",
@@ -241,7 +249,7 @@ namespace Toxiproxy.Net.Tests
         [Fact]
         public void AddTwoToxicWithTheSameNameShouldThrowException()
         {
-            var client = _connection.Client();
+            var client = _fixture.Client();
             var proxy = new Proxy
             {
                 Name = "testingProxy",
@@ -277,7 +285,7 @@ namespace Toxiproxy.Net.Tests
             // Add a toxics to a proxy.
             // After reload the toxic again and check that all the properties
             // are correctly saved 
-            var client = _connection.Client();
+            var client = _fixture.Client();
             var proxy = new Proxy
             {
                 Name = "testingProxy",
@@ -317,7 +325,7 @@ namespace Toxiproxy.Net.Tests
             // Add two toxics to a proxy.
             // After delete the first one and check that
             // there is still the second toxic in the proxy
-            var client = _connection.Client();
+            var client = _fixture.Client();
             var proxy = new Proxy
             {
                 Name = "testingProxy",
@@ -369,7 +377,7 @@ namespace Toxiproxy.Net.Tests
             // After update all the toxic's properties
             // Reload the toxic again and check that all the properties
             // are correctly updated 
-            var client = _connection.Client();
+            var client = _fixture.Client();
             var proxy = new Proxy
             {
                 Name = "testingProxy",
@@ -415,5 +423,8 @@ namespace Toxiproxy.Net.Tests
             Assert.Equal(toxicInProxy.Attributes.Delay, specificToxicInProxy.Attributes.Delay);
             Assert.Equal(toxicInProxy.Attributes.SizeVariation, specificToxicInProxy.Attributes.SizeVariation);
         }
+
+        public void Dispose()
+            => _fixture?.Dispose();
     }
 }
