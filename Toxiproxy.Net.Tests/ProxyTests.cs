@@ -361,7 +361,7 @@ namespace Toxiproxy.Net.Tests
             // Retrieve the proxy and check that there is the
             // correct toxics
             var toxicsInProxy = newProxy.GetAllToxics();
-            Assert.Equal(1, toxicsInProxy.Count());
+            Assert.True(toxicsInProxy.Count() == 1);
             Assert.IsType<SlowCloseToxic>(toxicsInProxy.First());
             var singleToxicInProxy = (SlowCloseToxic)toxicsInProxy.First();
             Assert.Equal(secondToxic.Name, singleToxicInProxy.Name);

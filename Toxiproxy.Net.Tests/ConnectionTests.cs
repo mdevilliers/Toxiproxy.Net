@@ -4,44 +4,39 @@ using Xunit;
 namespace Toxiproxy.Net.Tests
 {
     [Collection("Integration")]
-    public class ConnectionTests : IDisposable 
+    public class ConnectionTests : IDisposable
     {
         private readonly TestFixture _fixture;
 
         public ConnectionTests()
         {
-           _fixture = new TestFixture(); 
+            _fixture = new TestFixture();
         }
-        
+
         [Fact]
         public void ErrorThrownIfHostIsNullOrEmpty()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                _ = new Connection("");
-            });
+            Assert.Throws<ArgumentNullException>(() => { _ = new Connection(""); });
 
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                _ = new Connection(null);
-            });
+            Assert.Throws<ArgumentNullException>(() => { _ = new Connection(null); });
         }
 
         [Fact]
         public void DisposeEnablesAndResetsAllProxies()
         {
+            _fixture.Client();
             var connection = new Connection(resetAllToxicsAndProxiesOnClose: true);
 
             var client = connection.Client();
-            client.Add(_fixture.ProxyOne);
+            client.Add(TestProxy.One);
 
-            var proxy = client.FindProxy(_fixture.ProxyOne.Name);
+            var proxy = client.FindProxy(TestProxy.One.Name);
             proxy.Enabled = false;
             proxy.Update();
 
             connection.Dispose();
 
-            var proxyCopy = client.FindProxy(_fixture.ProxyOne.Name);
+            var proxyCopy = client.FindProxy(TestProxy.One.Name);
             Assert.True(proxyCopy.Enabled);
         }
 
