@@ -1,18 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toxiproxy.Net", "Toxiproxy.Net\Toxiproxy.Net.csproj", "{6BD7B017-A750-4889-A66E-97B691838A8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToxiProxy.Net", "ToxiProxy.Net\ToxiProxy.Net.csproj", "{D8A50E37-2597-432A-A2C5-3133CEDA0C15}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E1CEF3E4-9AED-4CC5-B296-EE8A196D9C09}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toxiproxy.Net.Tests", "Toxiproxy.Net.Tests\Toxiproxy.Net.Tests.csproj", "{10087FD2-3D58-47B6-A431-54B78AF4E2AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToxiProxy.Net.Tests", "ToxiProxy.Net.Tests\ToxiProxy.Net.Tests.csproj", "{AA6A4E05-DE7B-48DA-9531-EDD16EE06DA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,16 +10,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6BD7B017-A750-4889-A66E-97B691838A8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6BD7B017-A750-4889-A66E-97B691838A8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6BD7B017-A750-4889-A66E-97B691838A8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6BD7B017-A750-4889-A66E-97B691838A8D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{10087FD2-3D58-47B6-A431-54B78AF4E2AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10087FD2-3D58-47B6-A431-54B78AF4E2AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10087FD2-3D58-47B6-A431-54B78AF4E2AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10087FD2-3D58-47B6-A431-54B78AF4E2AA}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
+		{D8A50E37-2597-432A-A2C5-3133CEDA0C15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8A50E37-2597-432A-A2C5-3133CEDA0C15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8A50E37-2597-432A-A2C5-3133CEDA0C15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8A50E37-2597-432A-A2C5-3133CEDA0C15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA6A4E05-DE7B-48DA-9531-EDD16EE06DA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA6A4E05-DE7B-48DA-9531-EDD16EE06DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA6A4E05-DE7B-48DA-9531-EDD16EE06DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA6A4E05-DE7B-48DA-9531-EDD16EE06DA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

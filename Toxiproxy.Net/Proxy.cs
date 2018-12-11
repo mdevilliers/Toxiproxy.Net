@@ -26,9 +26,7 @@ namespace Toxiproxy.Net
         /// </summary>
         /// <returns></returns>
         public Proxy Update()
-        {
-            return Client.Update(this);         
-        }
+            => Client.Update(this);
 
         /// <summary>
         /// Adds the specified toxic to this proxy.
@@ -37,18 +35,14 @@ namespace Toxiproxy.Net
         /// <param name="toxic">The toxic.</param>
         /// <returns></returns>
         public T Add<T>(T toxic) where T : ToxicBase
-        {
-            return Client.AddToxicToProxy<T>(this, toxic);
-        }
+            => Client.AddToxicToProxy<T>(this, toxic);
 
         /// <summary>
         /// Gets all the toxics.
         /// </summary>
         /// <returns></returns>
         public IEnumerable<ToxicBase> GetAllToxics()
-        {
-            return Client.FindAllToxicsByProxyName(Name);
-        }
+            => Client.FindAllToxicsByProxyName(Name);
 
         /// <summary>
         /// Gets a toxic by name in this proxy.
@@ -56,9 +50,7 @@ namespace Toxiproxy.Net
         /// <param name="name">The name.</param>
         /// <returns></returns>
         public ToxicBase GetToxicByName(string name)
-        {
-            return Client.FindToxicByProxyNameAndToxicName(this, name);
-        }
+            => Client.FindToxicByProxyNameAndToxicName(this, name);
 
         /// <summary>
         /// Removes the toxic.

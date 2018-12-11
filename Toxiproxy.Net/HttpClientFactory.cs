@@ -4,7 +4,7 @@ using System.Net.Http;
 namespace Toxiproxy.Net
 {
     /// <summary>
-    /// The factory class to create preconfigured HttoClient
+    /// The factory class to create preconfigured HttpClient
     /// </summary>
     /// <seealso cref="Toxiproxy.Net.IHttpClientFactory" />
     internal class HttpClientFactory : IHttpClientFactory
